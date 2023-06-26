@@ -1,0 +1,30 @@
+@charset "UTF-8";
+@font-face {
+    font-family: 'SUITE-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-2@1.0/SUITE-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+}
+
+body {
+	font-family: 'SUITE-Regular' !important;
+}
+
+.main_content {
+	font-weight:bold;
+	font-size : 28px;
+}
+
+hr {
+	border-top: 1px solid #bbb !important;
+}
+
+hr::before {
+    content: "";
+    display: inline-block;
+    width: 22px;
+    position: absolute;
+    height: 2px;
+    background: #fc2020;
+    margin-top : -2px;
+}
