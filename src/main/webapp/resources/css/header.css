@@ -16,17 +16,6 @@ body {
   width:150px;
 }
 
-input {
-  width: 100%;
-  height:50px;
-  border: 0px #fff;
-  border-radius: 25px;
-  padding: 10px 12px;
-  font-size: 14px;
-  background-color: #F8F6F4;
-  outline:none;
-}
-
 .search img {
   position : absolute;
   width: 25px;

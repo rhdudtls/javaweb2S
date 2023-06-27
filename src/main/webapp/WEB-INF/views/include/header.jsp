@@ -9,6 +9,22 @@
 	<title>title</title>
 	<jsp:include page="/WEB-INF/views/include/bs4.jsp"/>
 	<link rel="stylesheet" href="${ctp}/css/header.css">
+	<style>
+		.top_icon {
+			padding-right:12px;
+			color:black;
+		}
+		#search_input {
+		  width: 100%;
+		  height:50px;
+		  border: 0px #fff;
+		  border-radius: 25px;
+		  padding: 10px 12px;
+		  font-size: 14px;
+		  background-color: #F8F6F4;
+		  outline:none;
+		}
+	</style>
 </head>
 <body>
 <p><br/></p>
@@ -18,15 +34,13 @@
 			<img src="${ctp}/images/top_logo.png"/>
 		</div>
 		<div class="col-6 search">
-			<input type="text" placeholder="닭가슴살은 역시 마이닭!">
+			<input type="text" id="search_input" placeholder="닭가슴살은 역시 마이닭!">
 			<img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
 		</div>
-		<div class="col-3 text-right mt-2">
-			<!-- <i class="fa-regular fa-user fa-3x"></i> -->
-			<img src="${ctp}/images/user.jpg" style="width:50px;">
-			<img src="${ctp}/images/cart.jpg" style="width:50px; margin-right:5px;">
-			<img src="${ctp}/images/stamp.jpg" style="width:50px; margin-right:5px;">
-			<!-- <i class="fa-regular fa-calendar-check fa-3x"></i> -->
+		<div class="col-3 text-right mt-2" style="font-size:2.5em; ">
+			<i class="fa-regular fa-user top_icon"></i>
+			<i class="fa-solid fa-cart-shopping top_icon"></i>
+			<i class="fa-regular fa-calendar-check top_icon"></i>
 		</div>
 	</div>
 	<div class="row category mt-5">

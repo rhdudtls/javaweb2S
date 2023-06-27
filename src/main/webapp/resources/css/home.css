@@ -28,3 +28,32 @@ hr::before {
     background: #fc2020;
     margin-top : -2px;
 }
+
+.plus_icon {
+	color:#C6C6C6;
+	font-size:20px;
+	padding-top:15px;
+}
+
+.hot_deal {
+	background-color: #F4F9F9;
+}
+
+.hot_deal_title {
+	font-size: 37px;
+	font-weight:bold;
+	padding-top:50px;
+}
+
+.review_button {
+	font-size:14px;
+	background-color:white;
+    width: 135px;
+    height: 40px;
+    border: 1px solid #dedede;
+    line-height: 40px;
+    padding: 0 14px;
+    position: relative;
+    font-weight: bold;
+    text-align:left;
+}
