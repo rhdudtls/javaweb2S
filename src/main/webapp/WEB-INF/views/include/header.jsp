@@ -31,7 +31,7 @@
 <div class="container">
 	<div class="row">
 		<div class="col-3">
-			<img src="${ctp}/images/top_logo.png"/>
+			<a href="${ctp}/"><img src="${ctp}/images/top_logo.png"/></a>
 		</div>
 		<div class="col-6 search">
 			<input type="text" id="search_input" placeholder="닭가슴살은 역시 마이닭!">
@@ -39,7 +39,7 @@
 		</div>
 		<div class="col-3 text-right mt-2" style="font-size:2.5em; ">
 			<i class="fa-regular fa-user top_icon"></i>
-			<i class="fa-solid fa-cart-shopping top_icon"></i>
+			<i class="fa-solid fa-cart-shopping top_icon" style="padding-right:15px;"></i>
 			<i class="fa-regular fa-calendar-check top_icon"></i>
 		</div>
 	</div>
@@ -55,8 +55,8 @@
 			<span class="category_left">식사대용</span>
 		</div>
 		<div class="col-4 text-right category_right">
-			<span>로그인</span>&nbsp;&nbsp;|
-			<span>적립금</span>&nbsp;&nbsp;|
+			<a href="${ctp}/member/memberLogin" style="text-decoration:none; color:gray;">로그인</a>&nbsp;&nbsp;|
+			<span>회원가입</span>&nbsp;&nbsp;|
 			<span>주문조회</span>&nbsp;&nbsp;|
 			<span>공지사항</span>&nbsp;&nbsp;|
 			<span>이벤트</span>

@@ -27,7 +27,6 @@ body {
 .category {
 	padding-left:30px;
 }
-
 .whole_category {
 	vertical-align:top;
 	font-size:18px;
@@ -40,7 +39,7 @@ body {
 	margin-right:28px;
 }
 
-.category_right{
+.category_right {
 	padding-top:3px;
 	font-size:14px;
 	color:gray;
