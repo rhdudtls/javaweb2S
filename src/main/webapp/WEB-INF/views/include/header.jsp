@@ -15,14 +15,18 @@
 			color:black;
 		}
 		#search_input {
-		  width: 100%;
-		  height:50px;
-		  border: 0px #fff;
-		  border-radius: 25px;
-		  padding: 10px 12px;
-		  font-size: 14px;
-		  background-color: #F8F6F4;
-		  outline:none;
+			width: 100%;
+			height:50px;
+			border: 0px #fff;
+			border-radius: 25px;
+			padding: 10px 12px;
+			font-size: 14px;
+			background-color: #F8F6F4;
+			outline:none;
+		}
+		.category_right a, .category_right a:hover {
+			text-decoration: none !important;
+			color:gray !important;
 		}
 	</style>
 </head>
@@ -55,8 +59,8 @@
 			<span class="category_left">식사대용</span>
 		</div>
 		<div class="col-4 text-right category_right">
-			<a href="${ctp}/member/memberLogin" style="text-decoration:none; color:gray;">로그인</a>&nbsp;&nbsp;|
-			<span>회원가입</span>&nbsp;&nbsp;|
+			<a href="${ctp}/member/memberLogin">로그인</a>&nbsp;&nbsp;|
+			<a href="${ctp}/member/memberJoinType">회원가입</a>&nbsp;&nbsp;|
 			<span>주문조회</span>&nbsp;&nbsp;|
 			<span>공지사항</span>&nbsp;&nbsp;|
 			<span>이벤트</span>

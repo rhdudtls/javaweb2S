@@ -9,7 +9,7 @@
 	<link rel="stylesheet" href="${ctp}/css/home.css">
 	<style>
 		a {
-			 text-decoration:none;
+			text-decoration:none;
 		}
 		.circle {
 			width : 30px;
@@ -41,41 +41,41 @@
 <body>
 <jsp:include page="/WEB-INF/views/include/header.jsp"/>
 <div id="demo" class="carousel slide carousel-fade text-center" data-ride="carousel">
-  <!-- Indicators -->
-  <ul class="carousel-indicators" style="padding-right:40px;">
-    <li data-target="#demo" data-slide-to="0" class="active"></li>
-    <li data-target="#demo" data-slide-to="1"></li>
-    <li data-target="#demo" data-slide-to="2"></li>
-    <li data-target="#demo" data-slide-to="3"></li>
-    <li data-target="#demo" data-slide-to="4"></li>
-  </ul>
+	<!-- Indicators -->
+	<ul class="carousel-indicators" style="padding-right:40px;">
+		<li data-target="#demo" data-slide-to="0" class="active"></li>
+		<li data-target="#demo" data-slide-to="1"></li>
+		<li data-target="#demo" data-slide-to="2"></li>
+		<li data-target="#demo" data-slide-to="3"></li>
+		<li data-target="#demo" data-slide-to="4"></li>
+	</ul>
 
-  <!-- The slideshow -->
-  <div class="carousel-inner">
-    <div class="carousel-item active">
-      <img src="${ctp}/images/banner01.jpg">
-    </div>
-    <div class="carousel-item">
-      <img src="${ctp}/images/banner02.jpg">
-    </div>
-    <div class="carousel-item">
-      <img src="${ctp}/images/banner03.jpg">
-    </div>
-    <div class="carousel-item">
-      <img src="${ctp}/images/banner04.jpg">
-    </div>
-    <div class="carousel-item">
-      <img src="${ctp}/images/banner05.jpg">
-    </div>
-  </div>
+	<!-- The slideshow -->
+	<div class="carousel-inner">
+		<div class="carousel-item active">
+			<img src="${ctp}/images/banner01.jpg">
+		</div>
+		<div class="carousel-item">
+			<img src="${ctp}/images/banner02.jpg">
+		</div>
+		<div class="carousel-item">
+			<img src="${ctp}/images/banner03.jpg">
+		</div>
+		<div class="carousel-item">
+			<img src="${ctp}/images/banner04.jpg">
+		</div>
+		<div class="carousel-item">
+			<img src="${ctp}/images/banner05.jpg">
+		</div>
+	</div>
 
-  <!-- Left and right controls -->
-  <a class="carousel-control-prev" href="#demo" data-slide="prev">
-    <span class="carousel-control-prev-icon"></span>
-  </a>
-  <a class="carousel-control-next" href="#demo" data-slide="next">
-    <span class="carousel-control-next-icon"></span>
-  </a>
+	<!-- Left and right controls -->
+	<a class="carousel-control-prev" href="#demo" data-slide="prev">
+		<span class="carousel-control-prev-icon"></span>
+	</a>
+	<a class="carousel-control-next" href="#demo" data-slide="next">
+		<span class="carousel-control-next-icon"></span>
+	</a>
 </div>
 <p><br/></p>
 <div class="container">
@@ -89,12 +89,12 @@
 			<div class="card col" style="width:265px; border:none;">
 			    <img class="card-img-top" src="${ctp}/images/product1.jpg" style="width:100%">
 			    <div class="card-body p-0 mt-2">
-			      <div class="card-title" style="font-size:17px;"><b>미트리 파워에너지 프로틴바 2종 골라담기</b></div>
-			      <p class="card-text">
-			      	<span style="color:red;font-size:22px;"><b>37%</b></span>&nbsp;&nbsp;
-			      	<span style="font-size:19px;"><b>2,200원</b></span>&nbsp;
-			      	<span style="color:gray;font-size:14px;"><b><s>3,500원</s></b></span>
-			      </p>
+			    	<div class="card-title" style="font-size:17px;"><b>미트리 파워에너지 프로틴바 2종 골라담기</b></div>
+					<p class="card-text">
+						<span style="color:red;font-size:22px;"><b>37%</b></span>&nbsp;&nbsp;
+						<span style="font-size:19px;"><b>2,200원</b></span>&nbsp;
+						<span style="color:gray;font-size:14px;"><b><s>3,500원</s></b></span>
+					</p>
 		    	</div>
 		    </div>
 	    </c:forEach>
@@ -110,19 +110,19 @@
 				<div class="card col" style="margin-right:20px; border:none;">
 				    <img class="card-img-top" src="${ctp}/images/hot_deal1.jpg" style="width:100%">
 				    <div class="card-body p-0 mt-2">
-				      <div class="card-title" style="font-size:17px;"><b>미트리 닭가슴살 후랑크핫바 5종 혼합 10팩</b></div>
-				      <p class="card-text">
-				      	<div class="row">
-				      		<div class="col-10">
-						      	<span style="color:red;font-size:22px;"><b>45%</b></span>&nbsp;&nbsp;
-						      	<span style="font-size:19px;"><b>10,900원</b></span>&nbsp;
-						      	<span style="color:gray;font-size:14px;"><b><s>20,000원</s></b></span>
-					      	</div>
-					      	<div class="col-2">
-					      		<div class="circle"><i class="fa-solid fa-basket-shopping shopping_icon"></i></div>
-					      	</div>
-				      	</div>
-				      </p>
+				    	<div class="card-title" style="font-size:17px;"><b>미트리 닭가슴살 후랑크핫바 5종 혼합 10팩</b></div>
+						<p class="card-text">
+							<div class="row">
+								<div class="col-10">
+								  	<span style="color:red;font-size:22px;"><b>45%</b></span>&nbsp;&nbsp;
+									<span style="font-size:19px;"><b>10,900원</b></span>&nbsp;
+									<span style="color:gray;font-size:14px;"><b><s>20,000원</s></b></span>
+						 		</div>
+							 	<div class="col-2">
+							 		<div class="circle"><i class="fa-solid fa-basket-shopping shopping_icon"></i></div>
+							 	</div>
+							</div>
+						</p>
 			    	</div>
 			    </div>
 		    </c:forEach>
@@ -142,12 +142,12 @@
 			<div class="card col" style="width:265px; border:none;">
 			    <img class="card-img-top" src="${ctp}/images/product1.jpg" style="width:100%">
 			    <div class="card-body p-0 mt-2">
-			      <div class="card-title" style="font-size:17px;"><b>미트리 닭가슴살/볶음밥 외 전상품 골라담기</b></div>
-			      <p class="card-text">
-			      	<span style="color:red;font-size:22px;"><b>48%</b></span>&nbsp;&nbsp;
-			      	<span style="font-size:19px;"><b>1,300원</b></span>&nbsp;
-			      	<span style="color:gray;font-size:14px;"><b><s>2,500원</s></b></span>
-			      </p>
+					<div class="card-title" style="font-size:17px;"><b>미트리 닭가슴살/볶음밥 외 전상품 골라담기</b></div>
+					<p class="card-text">
+						<span style="color:red;font-size:22px;"><b>48%</b></span>&nbsp;&nbsp;
+						<span style="font-size:19px;"><b>1,300원</b></span>&nbsp;
+						<span style="color:gray;font-size:14px;"><b><s>2,500원</s></b></span>
+					</p>
 		    	</div>
 		    </div>
 	    </c:forEach>
