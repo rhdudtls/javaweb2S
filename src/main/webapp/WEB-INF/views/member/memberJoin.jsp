@@ -42,13 +42,16 @@
 		'use strict';
 		let idCheckSw = 0;
 		let nickCheckSw = 0;
+		let telCheckSw = 0;
+		let emailCheckSw = 0;
+		
 		
 		function fCheck() {
 			let submitFlag = 0;
 			
 			let regMid = /^[a-zA-Z0-9_]{4,20}$/; // 영어/숫자/언더바 조합의 4~20자리
 			let regPwd = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,19}$/; //영어 숫자 특수문자가 최소 각 1개씩으로 이루어진 8~20자리
-			let regNickName = /^[a-zA-Z0-9가-힣]{1,20}$/; //영어 숫자 한글로 이루어진 1~20자
+			let regNickName = /^[a-zA-Z0-9가-힣]{1,10}$/; //영어 숫자 한글로 이루어진 1~20자
 			let regName = /^[a-zA-Z가-힣]{2,20}$/; //영어 한글로 이루어진 2~20자
 			let regEmail =/^[a-zA-Z0-9_]{2,}$/;
 			let regTel = /\d{2,3}-\d{3,4}-\d{4}$/g;
@@ -82,17 +85,243 @@
 		  		myform.mid.focus();
 		  		return false;
 		  	}
-		
+		  	else if(pwd.trim() == "") {
+		  		alert("비밀번호를 입력하세요!");
+		  		myform.pwd.focus();
+		  		return false;
+		  	}
+		  	else if(!regPwd.test(pwd)) {
+		  		alert("비밀번호가 입력형식에 맞지 않습니다.");
+		  		pwd = $("#pwd").val("");
+		  		myform.pwd.focus();
+		  		return false;
+		  	}
+		  	else if(name.trim() == "") {
+		  		alert("성명을 입력하세요!");
+		  		myform.name.focus();
+		  		return false;
+		  	}
+		  	else if(!regName.test(name)) {
+			   	alert("성명이 입력형식에 맞지 않습니다.")
+			   	name = $("#name").val("");
+		        myform.name.focus();
+		        return false;
+		    }
+		  	else if(nickName.trim() == "") {
+		  		alert("닉네임을 입력하세요!");
+		  		myform.nickName.focus();
+		  		return false;
+		  	}
+		  	else if(!regNickName.test(nickName)) {
+			   	alert("닉네임이 입력형식에 맞지 않습니다.")
+			   	nickName = $("#nickName").val("");
+			    myform.nickName.focus();
+			    return false;
+		    }
+		  	else if(!regEmail.test(email1)) {
+		       alert("이메일이 입력형식에 맞지 않습니다.");
+		       email1 = $("#email1").val("");
+		       myform.email1.focus();
+		       return false;
+		    }
+		  	else if(email2.trim() == "") {
+		  		alert("이메일주소를 선택하세요!");
+		  		myform.email2.focus();
+		  		return false;
+		  	}
+		  	else if(tel2.trim() == "" || tel3.trim() == "") {
+		  		alert("전화번호를 입력하세요!");
+		  		myform.tel2.focus();
+		  		return false;
+		  	}
+		  	else if(!regTel.test(tel)) {
+		        alert("전화번호가 입력형식에 맞지 않습니다.");
+		        tel2 = $("#tel2").val("");
+		        myform.tel2.focus();
+		        return false;
+		    }
+		  	else {
+		  		submitFlag = 1;
+		  	}
+			
+			if(submitFlag == 1) {
+				if(idCheckSw == 0) {
+					alert("중복된 아이디입니다. 다른 아이디를 사용해주세요.");
+					document.getElementById("mid").focus();
+				}
+				else if(nickCheckSw == 0) {
+					alert("중복된 닉네임입니다. 다른 닉네임을 사용해주세요.");
+					document.getElementById("nickName").focus();
+				}
+				else if(telCheckSw == 0) {
+					alert("이미 가입된 전화번호 입니다. 기존 아이디로 로그인해주세요.");
+					document.getElementById("tel2").focus();
+				}
+				else if(emailCheckSw == 0) {
+					alert("이미 가입된 이메일 입니다. 기존 아이디로 로그인해주세요.");
+					document.getElementById("email1").focus();
+				}
+				else {
+			 		myform.email.value = email;
+			 		myform.tel.value = tel;
+			 		
+			  		myform.submit();
+				}
+			}
+		  	else {
+		  		alert("회원가입 실패~~ 폼의 내용을 확인하세요.");
+		  	}
 		}
 		
-		function idRegCheck() {
+		function idCheck() {
 			let regMid = /^[a-zA-Z0-9_]{4,20}$/;
 			let mid = myform.mid.value;
 			if(!regMid.test(mid)) {
 				$("#demoId").html('<font color="red">아이디 형식이 올바르지 않습니다.</font>');
+				idCheckSw = 0;
 			}
 			else {
-				$("#demoId").html('<font color="green">아이디 형식이 올바릅니다.</font>');
+				
+				$.ajax({
+					type : "post",
+					url : "${ctp}/member/memberDupliCheck/mid",
+					data : {data : mid},
+					success : function(res) {
+						if(res == "1") {
+							$("#demoId").html('<font color="red">이미 사용중인 아이디 입니다.</font>');
+							idCheckSw = 0;
+						}
+						else {
+							$("#demoId").html('<font color="green">사용 가능한 아이디 입니다.</font>');
+							idCheckSw = 1;
+						}
+					},
+					error : function() {
+						alert("전송오류!")
+					}					
+				});
+				
+			}
+		}
+		
+		function nickCheck() {
+			let regNickName = /^[a-zA-Z0-9가-힣]{1,10}$/;
+			let nickName = myform.nickName.value;
+			if(!regNickName.test(nickName)) {
+				$("#demoNick").html('<font color="red">닉네임 형식이 올바르지 않습니다.</font>');
+				nickCheckSw = 0;
+			}
+			else {
+				
+				$.ajax({
+					type : "post",
+					url : "${ctp}/member/memberDupliCheck/nickName",
+					data : {data : nickName},
+					success : function(res) {
+						if(res == "1") {
+							$("#demoNick").html('<font color="red">이미 사용중인 닉네임 입니다.</font>');
+							nickCheckSw = 0;
+						}
+						else {
+							$("#demoNick").html('<font color="green">사용 가능한 닉네임 입니다.</font>');
+							nickCheckSw = 1;
+						}
+					},
+					error : function() {
+						alert("전송오류!")
+					}					
+				});
+				
+			}
+		}
+		
+		function telCheck() {
+			let regTel = /\d{2,3}-\d{3,4}-\d{4}$/g;
+			let tel1 = myform.tel1.value;
+		  	let tel2 = myform.tel2.value;
+		  	let tel3 = myform.tel3.value;
+		  	let tel = tel1 + "-" + tel2 + "-" + tel3;
+		  	
+			if(!regTel.test(tel)) {
+				$("#demoTel").html('<font color="red">전화번호 형식이 올바르지 않습니다.</font>');
+				telCheckSw = 0;
+			}
+			else {
+				
+				$.ajax({
+					type : "post",
+					url : "${ctp}/member/memberDupliCheck/tel",
+					data : {data : tel},
+					success : function(res) {
+						if(res == "1") {
+							$("#demoTel").html('<font color="red">이미 가입된 전화번호 입니다.</font>');
+							telCheckSw = 0;
+						}
+						else {
+							$("#demoTel").html('<font color="green">사용 가능한 전화번호 입니다.</font>');
+							telCheckSw = 1;
+						}
+					},
+					error : function() {
+						alert("전송오류!")
+					}					
+				});
+				
+			}
+		}
+		
+		function emailCheck() {
+			
+			let email1 = myform.email1.value;
+		  	let email2 = myform.email2.value;
+		  	let email = email1 + "@" + email2;
+		  	
+		  	if(email1.trim() == "" || email2.trim() == "") {
+		  		$("#demoEmail").html('<font color="red">이메일을 입력하세요.</font>');
+		  	}
+		  	else {
+				$.ajax({
+					type : "post",
+					url : "${ctp}/member/memberDupliCheck/email",
+					data : {data : email},
+					success : function(res) {
+						if(res == "1") {
+							$("#demoEmail").html('<font color="red">이미 가입된 이메일 입니다.</font>');
+							emailCheckSw = 0;
+						}
+						else {
+							$("#demoEmail").html('<font color="green">사용 가능한 이메일 입니다.</font>');
+							$("#emailAuthBox").show();
+							emailCheckSw = 1;
+						}
+					},
+					error : function() {
+						alert("전송오류!")
+					}					
+				});
+		  	}
+				
+		}
+		
+		function pwdCheck() {
+			let regPwd = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&~_])[A-Za-z\d@$!%*#?&~_]{8,19}$/;
+			let pwd = myform.pwd.value;
+			if(!regPwd.test(pwd)) {
+				$("#demoPwd").html('<font color="red">비밀번호 형식이 올바르지 않습니다.</font>');
+			}
+			else {
+				$("#demoPwd").html('<font color="green">비밀번호 형식이 올바릅니다.</font>');
+			}
+		}
+		
+		function emailInput() {
+			let imsiEmail = $("#emailChoice").val();
+			if(imsiEmail == "") {
+				myform.email2.value = "";
+				myform.email2.focus();
+			}
+			else {
+				myform.email2.value = imsiEmail;
 			}
 		}
 	</script>
@@ -119,8 +348,7 @@
 			    <label for="mid">아이디</label>
 			</div>
 			<div class="col-10">
-			  	<input type="text" name="mid" id="mid" placeholder="아이디를 입력하세요." required autofocus class="joininput mr-2" onkeyup="idRegCheck()"/>
-				<input type="button" value="아이디 중복체크" id="midBtn" class="btn btn-green btn-sm" onclick="idCheck()"/>
+			  	<input type="text" name="mid" id="mid" placeholder="아이디를 입력하세요." required autofocus class="joininput mr-2" onkeyup="idCheck()"/>
 			</div>
 			<div id="demoId" style="padding-left:210px;"></div>
 		</div>
@@ -131,8 +359,9 @@
 			    <label for="pwd">비밀번호</label>
 			</div>
 			<div class="col-10">
-			  	<input type="text" name="pwd" id="pwd" placeholder="비밀번호를 입력하세요." required class="joininput"/>
+			  	<input type="password" name="pwd" id="pwd" placeholder="비밀번호를 입력하세요." required class="joininput" onkeyup="pwdCheck()"/>
 			</div>
+			<div id="demoPwd" style="padding-left:210px;"></div>
 		</div>
 		<hr style="margin:15px 0px"/>
 		<div class="row">
@@ -151,9 +380,9 @@
 			    <label for="nickName">닉네임</label>
 			</div>
 			<div class="col-10">
-			  	<input type="text" name="nickName" id="nickName" placeholder="닉네임을 입력하세요." required class="joininput mr-2"/>
-				<input type="button" id="nickNameBtn" value="닉네임 중복체크" class="btn btn-green btn-sm" onclick="nickCheck()"/>
+			  	<input type="text" name="nickName" id="nickName" placeholder="닉네임을 입력하세요." required class="joininput mr-2" onkeyup="nickCheck()"/>
 			</div>
+			<div id="demoNick" style="padding-left:210px;"></div>
 		</div>
 		<hr style="margin:15px 0px"/>
 		<div class="row">
@@ -164,16 +393,21 @@
 			<div class="col-10">
 				<input type="text" placeholder="이메일을 입력하세요." id="email1" name="email1" required class="joininput"/> @
 				<input type="text" placeholder="이메일주소를 선택하세요." id="email2" name="email2" required class="joinselect"/>
-				<select name="emailChoice" class="joinselect mr-2">
-					<option value="naver.com" selected>naver.com</option>
+				<select name="emailChoice" id ="emailChoice" class="joinselect mr-2" onchange="emailInput()">
+					<option value="naver.com">naver.com</option>
 					<option value="hanmail.net">hanmail.net</option>
 					<option value="hotmail.com">hotmail.com</option>
 					<option value="gmail.com">gmail.com</option>
 					<option value="nate.com">nate.com</option>
 					<option value="yahoo.com">yahoo.com</option>
-					<option value="yahoo.com">직접입력</option>
+					<option value="">직접입력</option>
 	            </select>
-				<input type="button" id="emailAuth" value="이메일 인증" class="btn btn-green btn-sm mr-2"/>
+				<input type="button" value="이메일 인증" onclick="emailCheck()" class="btn btn-green btn-sm mr-2"/>
+				<div id="demoEmail" style="padding-left:5px"></div>
+				<div class="col mt-2" id="emailAuthBox" style="display:none;">
+					<input type="text" name="emailAuth" id="emailAuth" placeholder="인증번호를 입력하세요" class="joininput" style="margin-left:-15px;"/>
+					<input type="button" value="확인" class="btn btn-green btn-sm"/>
+				</div>
 				<div class="row mt-2 ml-1">
 					<div class="mr-2"><span style="color:red">*</span> 이메일 수신여부</div>
 					<input type="checkbox" id="emailAgree" checked/> &nbsp;동의함(쇼핑몰에서 제공하는 유익한 이벤트 소식을 이메일로 받으실 수 있습니다.)
@@ -211,20 +445,28 @@
 			<div class="col-10">
 				<select name="tel1" class="joinselect mr-2" style="width:10%">
 	              	<option value="010" selected>010</option>
-					<option value="02">서울</option>
-					<option value="031">경기</option>
-					<option value="032">인천</option>
-					<option value="041">충남</option>
-					<option value="042">대전</option>
-					<option value="043">충북</option>
-					<option value="051">부산</option>
-					<option value="052">울산</option>
-					<option value="061">전북</option>
-					<option value="062">광주</option>
+					<option value="02">02</option>
+					<option value="031">031</option>
+					<option value="032">032</option>
+					<option value="033">033</option>
+					<option value="041">041</option>
+					<option value="042">042</option>
+					<option value="043">043</option>
+					<option value="044">044</option>
+					<option value="051">051</option>
+					<option value="052">052</option>
+					<option value="053">053</option>
+					<option value="054">054</option>
+					<option value="055">055</option>
+					<option value="061">061</option>
+					<option value="062">062</option>
+					<option value="063">063</option>
+					<option value="064">064</option>
 	            </select>-
-		        <input type="text" name="tel2" size=4 maxlength=4 class="joininput ml-1 mr-2" style="width:10%"/>-
-		        <input type="text" name="tel3" size=4 maxlength=4 class="joininput ml-1" style="width:10%"/>
+		        <input type="text" name="tel2" size=4 maxlength=4 class="joininput ml-1 mr-2" style="width:10%" onkeyup="telCheck()"/>-
+		        <input type="text" name="tel3" size=4 maxlength=4 class="joininput ml-1" style="width:10%" onkeyup="telCheck()"/>
 			</div>
+			<div id="demoTel" style="padding-left:210px;"></div>
 		</div>
 		<hr style="margin:15px 0px"/>
 		<div class="content_title mt-5">추가정보</div>
@@ -242,7 +484,7 @@
 				<label for="birthday">생일</label>
 			</div>
 			<div class="col-10">
-				<input type="date" name="birthday" class="joininput"/>
+				<input type="date" name="birthday" value="<%=java.time.LocalDate.now() %>" class="joininput"/>
 			</div>
 		</div>
 		<hr style="border: solid 1px #D6E4E5;">

@@ -1,3 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.spring.javaweb2S.dao.MemberDAO"></mapper>
+<mapper namespace="com.spring.javaweb2S.dao.MemberDAO">
+	<select id="getMemberDupliCheck" resultType="com.spring.javaweb2S.vo.MemberVO">
+		select * from md_member where ${flag} = #{data};
+	</select>
+	
+	<insert id="setMemberJoin">
+		insert into md_member values(default, #{vo.mid}, #{vo.pwd}, #{vo.name}, #{vo.nickName}, #{vo.tel}, #{vo.email}, #{vo.gender}, #{vo.birthday}, #{vo.address}, default, default, default, default, default);
+	</insert>
+</mapper>
