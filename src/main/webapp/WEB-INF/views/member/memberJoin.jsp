@@ -37,6 +37,38 @@
 		.btn-green {
 			background-color: #E1ECC8 !important;
 		}
+		.layerPopup {
+		    display: none;
+		    position: fixed;
+		    top: 0;
+		    left: 0;
+		    width: 100%;
+		    height: 100%;
+		    background: rgba(0,0,0,0);
+		    z-index: 1000;
+		    justify-content: center;
+		    align-items: center;
+		    margin: -30px 0 0 -30px;
+		}
+		.spinner {
+		    position: absolute;
+		    top: 50%;
+		    left: 50%;
+		    border: 8px solid #f3f3f3; /* Light grey */
+		    border-top: 8px solid #3498db; /* Blue */
+		    border-radius: 50%;
+		    width: 60px;
+		    height: 60px;
+		    animation: spinner 2s linear infinite;
+		}
+		@keyframes spinner {
+		    0% {
+		        transform: rotate(0deg);
+		    }
+		    100% {
+		        transform: rotate(360deg);
+		    }
+		}
 	</style>
 	<script>
 		'use strict';
@@ -44,7 +76,9 @@
 		let nickCheckSw = 0;
 		let telCheckSw = 0;
 		let emailCheckSw = 0;
-		
+		let emailAuthSw = 0;
+		let timerRunning = 0;
+		var x;
 		
 		function fCheck() {
 			let submitFlag = 0;
@@ -129,6 +163,11 @@
 		  		myform.email2.focus();
 		  		return false;
 		  	}
+		  	else if(postcode.trim() == "" || roadAddress.trim() == "") {
+		  		alert("주소를 입력하세요!");
+		  		myform.postcode.focus();
+		  		return false;
+		  	}
 		  	else if(tel2.trim() == "" || tel3.trim() == "") {
 		  		alert("전화번호를 입력하세요!");
 		  		myform.tel2.focus();
@@ -158,8 +197,20 @@
 					document.getElementById("tel2").focus();
 				}
 				else if(emailCheckSw == 0) {
-					alert("이미 가입된 이메일 입니다. 기존 아이디로 로그인해주세요.");
+					alert("이메일 인증을 진행해주세요.");
 					document.getElementById("email1").focus();
+				}
+				else if(emailCheckSw == 2) {
+					alert("이미 가입된 이메일입니다. 기존 아이디로 로그인해주세요.");
+					document.getElementById("email1").focus();
+				}
+				else if(emailAuthSw == 0) {
+					alert("이메일 인증을 진행해주세요.");
+					document.getElementById("emailKey").focus();
+				}
+				else if($("#useAgree").is(":checked")==false || $("#infoAgree").is(":checked")==false) {
+					alert("약관에 모두 동의하셔야 회원가입이 가능합니다.");
+					document.getElementById("useAgree").focus();
 				}
 				else {
 			 		myform.email.value = email;
@@ -280,27 +331,82 @@
 		  		$("#demoEmail").html('<font color="red">이메일을 입력하세요.</font>');
 		  	}
 		  	else {
-				$.ajax({
+				 var promise = $.ajax({
 					type : "post",
 					url : "${ctp}/member/memberDupliCheck/email",
 					data : {data : email},
 					success : function(res) {
 						if(res == "1") {
 							$("#demoEmail").html('<font color="red">이미 가입된 이메일 입니다.</font>');
-							emailCheckSw = 0;
+							$("#emailAuthBox").hide();
+							emailCheckSw = 2;
 						}
 						else {
-							$("#demoEmail").html('<font color="green">사용 가능한 이메일 입니다.</font>');
+							showSpinner();
+							$("#demoEmail").hide();
+							$("#emailChoice").hide();
+							$("#emailAuthSend").hide();
+							$("#emailReSend").show();
 							$("#emailAuthBox").show();
+							document.getElementById('email1').readOnly = true; 
+							document.getElementById('email2').readOnly = true;
 							emailCheckSw = 1;
+							promise.done(emailSend(email));
 						}
 					},
 					error : function() {
 						alert("전송오류!")
 					}					
 				});
-		  	}
-				
+			}
+		}
+		
+		function emailSend(email){
+			if(emailCheckSw == 1) {
+				$.ajax({
+					type:"post",
+					url : "${ctp}/member/memberEmailSend",
+					data : {email : email},
+					success : function() {
+						hideSpinner();
+						setTimeout(function() {
+							alert("인증번호가 해당 메일로 발송되었습니다.");
+						}, 500);
+						Timer();
+						timerRunning = 1;
+						
+					},
+					error : function() {
+						alert("전송오류!")
+					}
+				});
+			}
+	    }
+		
+		function emailAuth(){
+			let emailKey = myform.emailKey.value;
+			$.ajax({
+				type : "post",
+				url : "${ctp}/member/memberEmailAuth",
+				data : {emailKey : emailKey},
+				success : function(res) {
+					if(res == "1") {
+						$("#emailAuthBox").hide();
+						$("#emailReSend").hide();
+						alert("이메일 인증완료!");
+						emailAuthSw = 1;
+					}
+					else if(res == "2") {
+						alert("제한시간이 경과하였습니다. 인증번호를 재발급받으세요.")
+					}
+					else {
+						alert("인증번호가 일치하지 않습니다.");
+					}
+				},
+				error : function() {
+					alert("전송오류!")
+				}
+			});
 		}
 		
 		function pwdCheck() {
@@ -323,6 +429,43 @@
 			else {
 				myform.email2.value = imsiEmail;
 			}
+		}
+		
+		function selectAll() {
+			if($("#allAgree").is(":checked")) {
+				$("input[name=agree]").prop("checked", true);
+			}
+		}
+		
+		function showSpinner() {
+		    document.getElementsByClassName('layerPopup')[0].style.display='block';
+		}
+		function hideSpinner() {
+		    document.getElementsByClassName('layerPopup')[0].style.display='none';
+		}
+		
+		function Timer() {
+			var time = 300;
+			var min = "";
+			var sec = "";
+			
+			if(timerRunning == 1) {
+				clearInterval(x);
+			}
+			
+			x = setInterval(function() {
+				min = parseInt(time/60);
+				sec = time%60;
+				
+				document.getElementById("demoTimer").innerHTML = '<b>'+min+' : '+sec+'</b>';
+				time--;
+				
+				if(time < 0) {
+					clearInterval(x);
+					document.getElementById("demoTimer").innerHTML = "시간초과";
+				}
+			}, 1000);
+			
 		}
 	</script>
 </head>
@@ -385,6 +528,9 @@
 			<div id="demoNick" style="padding-left:210px;"></div>
 		</div>
 		<hr style="margin:15px 0px"/>
+		<div class="layerPopup">
+		    <div class="spinner"></div>
+		</div>
 		<div class="row">
 			<div class="col-2 user_info">
 				<span>*</span>
@@ -402,15 +548,19 @@
 					<option value="yahoo.com">yahoo.com</option>
 					<option value="">직접입력</option>
 	            </select>
-				<input type="button" value="이메일 인증" onclick="emailCheck()" class="btn btn-green btn-sm mr-2"/>
+				<input type="button" id="emailAuthSend" value="이메일 인증" onclick="emailCheck()" class="btn btn-green btn-sm mr-2"/>
+				<input type="button" id="emailReSend" value="인증번호 재전송" onclick="emailCheck()" class="btn btn-green btn-sm mr-2" style="display:none;"/>
 				<div id="demoEmail" style="padding-left:5px"></div>
 				<div class="col mt-2" id="emailAuthBox" style="display:none;">
-					<input type="text" name="emailAuth" id="emailAuth" placeholder="인증번호를 입력하세요" class="joininput" style="margin-left:-15px;"/>
-					<input type="button" value="확인" class="btn btn-green btn-sm"/>
+					<div class="row">
+						<input type="text" name="emailKey" id="emailKey" placeholder="인증번호를 입력하세요" class="joininput mr-2"/>
+						<input type="button" value="확인" onclick="emailAuth()" class="btn btn-green btn-sm"/>
+						<div id="demoTimer" class="mt-2 pl-3"></div>
+					</div>
 				</div>
 				<div class="row mt-2 ml-1">
 					<div class="mr-2"><span style="color:red">*</span> 이메일 수신여부</div>
-					<input type="checkbox" id="emailAgree" checked/> &nbsp;동의함(쇼핑몰에서 제공하는 유익한 이벤트 소식을 이메일로 받으실 수 있습니다.)
+					<input type="checkbox" name="emailAgree" id="emailAgree" checked/> &nbsp;동의함(쇼핑몰에서 제공하는 유익한 이벤트 소식을 이메일로 받으실 수 있습니다.)
 				</div>
 			</div>
 		</div>
@@ -652,7 +802,7 @@
 
 부 칙(시행일) 이 약관은 년 월 일부터 시행합니다.
 		</textarea>
-		<div class="text-right">이용약관에 동의하십니까? <input type="checkbox" id="useAgree"/> 동의함</div>
+		<div class="text-right">이용약관에 동의하십니까? <input type="checkbox" name="agree" id="useAgree"/> 동의함</div>
 		<div class="mt-5 content_title">개인정보 수집 및 이용 동의</div>
 		<textarea rows="5" class="form-control">1. 개인정보 수집목적 및 이용목적
 
@@ -702,8 +852,8 @@ o 로그 기록
 
 ※ 동의를 거부할 수 있으나 거부시 회원 가입이 불가능합니다.
 		</textarea>
-		<div class="text-right">개인정보 수집 및 이용에 동의하십니까? <input type="checkbox" id="useAgree"/> 동의함</div>
-		<div class="text-center mt-2"><input type="checkbox" id="useAgree"/><font color="gray"><b> 전체동의(이용약관 및 개인정보 수집 및 이용)</b></font></div>
+		<div class="text-right">개인정보 수집 및 이용에 동의하십니까? <input type="checkbox" name="agree" id="infoAgree"/> 동의함</div>
+		<div class="text-center mt-2"><input type="checkbox" name="agree" id="allAgree" onclick="selectAll()"/><font color="gray"><b> 전체동의(이용약관 및 개인정보 수집 및 이용)</b></font></div>
 		<div class="text-center mt-4">
 			<input type="button" value="취소" onclick="location.href='${ctp}/';" class="btn btn-red-border"/>
 			<input type="button" value="회원가입 확인" onclick="fCheck()" class="btn btn-red"/>

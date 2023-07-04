@@ -6,6 +6,6 @@
 	</select>
 	
 	<insert id="setMemberJoin">
-		insert into md_member values(default, #{vo.mid}, #{vo.pwd}, #{vo.name}, #{vo.nickName}, #{vo.tel}, #{vo.email}, #{vo.gender}, #{vo.birthday}, #{vo.address}, default, default, default, default, default);
+		insert into md_member values(default, #{vo.mid}, #{vo.pwd}, #{vo.name}, #{vo.nickName}, #{vo.tel}, #{vo.email}, #{vo.gender}, #{vo.birthday}, #{vo.address}, default, default, default, default, #{vo.snsCheck});
 	</insert>
 </mapper>

@@ -1,6 +1,15 @@
 package com.spring.javaweb2S;
 
+import java.util.UUID;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +32,9 @@ public class MemberController {
 	@Autowired
 	BCryptPasswordEncoder passwordEncoder;
 	
+	@Autowired
+	JavaMailSender mailSender;
+	
 	@RequestMapping(value = "/memberLogin", method = RequestMethod.GET)
 	public String memberLoginGet() {
 		return "member/memberLogin";
@@ -39,7 +51,12 @@ public class MemberController {
 	}
 	
 	@RequestMapping(value = "/memberJoin", method = RequestMethod.POST)
-	public String memberJoinPost(MemberVO vo) {
+	public String memberJoinPost(MemberVO vo,
+			@RequestParam(name="emailAgree", defaultValue = "off", required = false)String emailAgree) {
+		System.out.println("emailAgree :" + emailAgree);
+		
+		if(emailAgree.equals("on")) vo.setSnsCheck("YES");
+		else vo.setSnsCheck("NO");
 		
 		if(memberService.getMemberDupliCheck(vo.getMid(), "mid") != null) return "redirect:/message/idCheckNo";
 		if(memberService.getMemberDupliCheck(vo.getNickName(), "nickName") != null) return "redirect:/message/nickCheckNo";
@@ -50,8 +67,9 @@ public class MemberController {
 		
 		int res = memberService.setMemberJoin(vo);
 		
-		if(res == 1) return "redirect:/message/memberJoinOk";
-		else return "redirect:/message/memberJoinNo";
+		if(res == 1) return "redirect:/message/memberJoinOk"; else return
+		"redirect:/message/memberJoinNo";
+		
 	}
 	
 	@ResponseBody
@@ -63,5 +81,56 @@ public class MemberController {
 		
 		if(vo == null) return "0";
 		else return "1";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/memberEmailSend", method = RequestMethod.POST)
+	public String memberEmailSend(HttpSession eSession,
+			@RequestParam(name="email", defaultValue = "", required = false)String email) throws MessagingException {
+		String uid = UUID.randomUUID().toString().substring(0,6);
+		
+		String toMail = email;
+		String title = "[마이닭]회원가입 인증번호 발송";
+		String content = "";
+		
+		MimeMessage message = mailSender.createMimeMessage();
+		MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8");
+		
+		messageHelper.setTo(toMail);
+		messageHelper.setSubject(title);
+		messageHelper.setText(content);
+		
+		content += "<h2 style='text-align:center'>마이닭 인증번호</h2>";
+		content += "<hr style='width:60%'>";
+		content += "<div style='text-align:center'><b><font color='blue' size='4'>"+uid+"</font></b></div>";
+		
+		messageHelper.setText(content,true);
+		
+		mailSender.send(message);
+		
+		eSession.setAttribute("sEmailKey", uid);
+		eSession.setMaxInactiveInterval(60*5);
+		
+		return "";
+				
+	}
+	@ResponseBody
+	@RequestMapping(value = "/memberEmailAuth", method = RequestMethod.POST)
+	public String memberEmailAuthPost(HttpSession eSession, HttpServletRequest request,
+			@RequestParam(name="emailKey", defaultValue = "", required = false)String emailKey) {
+		
+		eSession = request.getSession();
+		String sEmailKey = (String) eSession.getAttribute("sEmailKey");
+		if(sEmailKey == null) {
+			return "2";
+		}
+		else if(sEmailKey.equals(emailKey)) {
+			eSession.removeAttribute("sEmailKey");
+			return "1";
+		}
+		else {
+			return "0";
+		}
+		
 	}
 }
