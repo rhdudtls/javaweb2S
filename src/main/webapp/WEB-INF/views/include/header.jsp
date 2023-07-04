@@ -1,6 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <c:set var="ctp" value="${pageContext.request.contextPath}"/>
+<%
+	int level = session.getAttribute("sLevel")==null? 99 : (int)session.getAttribute("sLevel");
+	pageContext.setAttribute("level", level);
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -41,10 +45,26 @@
 			<input type="text" id="search_input" placeholder="닭가슴살은 역시 마이닭!">
 			<img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
 		</div>
-		<div class="col-3 text-right mt-2" style="font-size:2.5em; ">
-			<i class="fa-regular fa-user top_icon"></i>
-			<i class="fa-solid fa-cart-shopping top_icon" style="padding-right:15px;"></i>
-			<i class="fa-regular fa-calendar-check top_icon"></i>
+		<div class="col-3 mt-2" style="font-size:2.5em;">
+			<div class="row">
+				<c:if test="${1 <= level && level <= 3}">
+					<div class="col-3 mt-3 pl-3 pr-0">
+						<span style="font-size:16px;">
+							${sNickName}님
+						</span>
+					</div>
+				</c:if>
+				<c:if test="${level == 0}">
+					<div class="col-3 mt-2 pl-5">
+						<a href="${ctp}/admin/adminMain"><i class="fa-solid fa-gear top_icon text-center"><font size="1">관리자</font></i></a>
+					</div>
+				</c:if>
+				<div class="col-9 text-right">
+					<i class="fa-regular fa-user top_icon"></i>
+					<i class="fa-solid fa-cart-shopping top_icon" style="padding-right:15px;"></i>
+					<i class="fa-regular fa-calendar-check top_icon"></i>
+				</div>
+			</div>
 		</div>
 	</div>
 	<div class="row category mt-5">
@@ -59,8 +79,14 @@
 			<span class="category_left">식사대용</span>
 		</div>
 		<div class="col-4 text-right category_right">
-			<a href="${ctp}/member/memberLogin">로그인</a>&nbsp;&nbsp;|
-			<a href="${ctp}/member/memberJoinType">회원가입</a>&nbsp;&nbsp;|
+			<c:if test="${level < 0 || level > 3}">
+				<a href="${ctp}/member/memberLogin">로그인</a>&nbsp;&nbsp;|
+				<a href="${ctp}/member/memberJoinType">회원가입</a>&nbsp;&nbsp;|
+			</c:if>
+			<c:if test="${0 <= level && level <= 3}">
+				<a href="${ctp}/member/memberLogout">로그아웃</a>&nbsp;&nbsp;|
+				<a href="${ctp}/member/memberJoinType">적립금</a>&nbsp;&nbsp;|
+			</c:if>
 			<span>주문조회</span>&nbsp;&nbsp;|
 			<span>공지사항</span>&nbsp;&nbsp;|
 			<span>이벤트</span>

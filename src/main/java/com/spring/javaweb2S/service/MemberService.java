@@ -8,5 +8,7 @@ public interface MemberService {
 
 	public int setMemberJoin(MemberVO vo);
 
+	public void setMemberLastVisitDate(MemberVO vo);
+
 
 }

@@ -8,4 +8,8 @@
 	<insert id="setMemberJoin">
 		insert into md_member values(default, #{vo.mid}, #{vo.pwd}, #{vo.name}, #{vo.nickName}, #{vo.tel}, #{vo.email}, #{vo.gender}, #{vo.birthday}, #{vo.address}, default, default, default, default, #{vo.snsCheck});
 	</insert>
+	
+	<update id="setMemberLastVisitDate">
+		update md_member set lastVisitDate = now() where mid = #{vo.mid};
+	</update>
 </mapper>

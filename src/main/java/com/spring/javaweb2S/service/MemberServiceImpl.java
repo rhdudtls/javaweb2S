@@ -22,4 +22,9 @@ public class MemberServiceImpl implements MemberService {
 		return memberDAO.setMemberJoin(vo);
 	}
 
+	@Override
+	public void setMemberLastVisitDate(MemberVO vo) {
+		memberDAO.setMemberLastVisitDate(vo);
+	}
+
 }

@@ -4,7 +4,9 @@ import java.util.UUID;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +14,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -36,8 +37,56 @@ public class MemberController {
 	JavaMailSender mailSender;
 	
 	@RequestMapping(value = "/memberLogin", method = RequestMethod.GET)
-	public String memberLoginGet() {
+	public String memberLoginGet(HttpServletRequest request) {
+		Cookie[] cookies = request.getCookies();
+		if(cookies != null) {
+			for(int i=0; i<cookies.length; i++) {
+				if(cookies[i].getName().equals("cMid")) {
+					request.setAttribute("mid", cookies[i].getValue());
+					break;
+				}
+			}
+		}
 		return "member/memberLogin";
+	}
+	
+	@RequestMapping(value = "/memberLogin", method = RequestMethod.POST)
+	public String memberLoginPost(HttpServletRequest request, HttpServletResponse response,
+			@RequestParam(name="mid", defaultValue = "", required = false)String mid,
+			@RequestParam(name="pwd", defaultValue = "", required = false)String pwd,
+			@RequestParam(name="idSave", defaultValue = "off", required = false)String idSave,
+			HttpSession session) {
+		
+		MemberVO vo = memberService.getMemberDupliCheck(mid, "mid");
+		
+		if(vo != null && vo.getMemberDel().equals("NO") && passwordEncoder.matches(pwd, vo.getPwd())) {
+			
+			session.setAttribute("sLevel", vo.getLevel());
+			session.setAttribute("sMid", vo.getMid());
+			session.setAttribute("sNickName", vo.getNickName());
+			
+			if(idSave.equals("on")) {
+				Cookie cookie = new Cookie("cMid", mid);
+				cookie.setMaxAge(60*60*24*30);
+				response.addCookie(cookie);
+			}
+			else {
+				Cookie[] cookies = request.getCookies();
+				for(int i=0; i<cookies.length; i++) {
+					if(cookies[i].getName().equals("cMid")) {
+						cookies[i].setMaxAge(0);
+						response.addCookie(cookies[i]);
+						break;
+					}
+				}
+			}
+			
+			memberService.setMemberLastVisitDate(vo);
+			return "redirect:/";
+		}
+		else {
+			return "redirect:/message/memberLoginNo";
+		}
 	}
 	
 	@RequestMapping(value = "/memberJoinType", method = RequestMethod.GET)
@@ -132,5 +181,13 @@ public class MemberController {
 			return "0";
 		}
 		
+	}
+	
+	@RequestMapping(value = "/memberLogout", method = RequestMethod.GET)
+	public String memberLogoutGet(HttpSession session) {
+		
+		session.invalidate();
+		
+		return "redirect:/";
 	}
 }

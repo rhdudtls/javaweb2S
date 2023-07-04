@@ -32,20 +32,20 @@
 					<input type="password" name="pwd" id="pwd" placeholder="비밀번호" required />
 				</div>
 				<div>
-					<input type="checkbox" name="idSave" id="remember_me" class="checkbox" checked />
-					<label for="remember_me"> 아이디 저장</label>
+					<input type="checkbox" name="idSave" id="idSave" class="checkbox" checked />
+					<label for="idSave"> 아이디 저장</label>
 				</div>
 				<div class="form-group text-center">
 					<button type="submit" class="btn btn-dark form-control" style="height:45px;"><b>기존 회원 로그인</b></button>
 				</div>
-				<div class="row aTag">
-					<span class="col" style="font-size:14px">
-						<a href="${ctp}/MemberIdSearch.mem"><span>아이디 찾기</span></a> |
-						<a href="${ctp}/MemberPwdSearch.mem"><span>비밀번호 찾기</span></a>
-					</span>
-					<a href="${ctp}/member/memberJoinType" class="text-right pr-3">가입하기</a>
-				</div>
 			</form>
+			<div class="row aTag">
+				<span class="col" style="font-size:14px">
+					<a href="${ctp}/MemberIdSearch.mem"><span>아이디 찾기</span></a> |
+					<a href="${ctp}/MemberPwdSearch.mem"><span>비밀번호 찾기</span></a>
+				</span>
+				<a href="${ctp}/member/memberJoinType" class="text-right pr-3">가입하기</a>
+			</div>
 		</div>
 	</div>
 </div>

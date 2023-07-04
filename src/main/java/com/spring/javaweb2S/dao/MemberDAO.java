@@ -10,5 +10,7 @@ public interface MemberDAO {
 
 	public int setMemberJoin(@Param("vo")MemberVO vo);
 
+	public void setMemberLastVisitDate(@Param("vo")MemberVO vo);
+
 
 }

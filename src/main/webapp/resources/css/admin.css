@@ -1,0 +1,57 @@
+@charset "UTF-8";
+@font-face {
+    font-family: 'SUITE-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-2@1.0/SUITE-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+}
+
+body {
+	font-family: 'SUITE-Regular' !important;
+}
+div.top {
+	height:60px;
+	float: top;
+	background-color:#CCD2F0;
+
+}
+div.left {
+	width: 230px;
+	height:100%;
+	float: left;
+	box-sizing: border-box;
+	background-color:#ECF2FF;
+}
+.collapsible {
+    background-color: #ECF2FF;
+    color: gray;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: center;
+    outline: none;
+    font-size: 18px;
+    font-weight: bold;
+}
+.active,
+.collapsible:hover {
+    background-color: #CCD2F0;
+}
+.content {
+    padding: 0 18px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+    background-color: #CCD2F0;
+}
+.collapsible:after {
+    content: '\002B';
+    color: gray;
+    font-weight: bold;
+    float: right;
+    margin-left: 5px;
+}
+.active:after {
+    content: "\2212";
+}
