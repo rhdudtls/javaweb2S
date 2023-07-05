@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.javaweb2S.dao.AdminDAO">
+	<select id="getMemberList" resultType="com.spring.javaweb2S.vo.MemberVO">
+		select * from md_member order by idx desc;
+	</select>
+	
+	<delete id="setMemberDel">
+		delete from md_member where 
+		<if test="idx != null">
+			idx = #{idx};
+		</if>
+		<if test="idx == null">
+			memberDel = 'YES';
+		</if>
+	</delete>
+	
+</mapper>

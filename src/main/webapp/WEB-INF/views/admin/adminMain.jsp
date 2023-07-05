@@ -10,7 +10,7 @@
 	<title>adminMain.jsp</title>
 	<jsp:include page="/WEB-INF/views/include/bs4.jsp"/>
 </head>
-<body>
+<body style="background-color:#EEF1FF">
 <div class="top">
 	<jsp:include page="/WEB-INF/views/admin/adminHeader.jsp"/>
 </div>

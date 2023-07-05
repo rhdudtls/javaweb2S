@@ -137,7 +137,7 @@ public class MemberController {
 	public String memberEmailSend(HttpSession eSession,
 			@RequestParam(name="email", defaultValue = "", required = false)String email) throws MessagingException {
 		String uid = UUID.randomUUID().toString().substring(0,6);
-		
+		System.out.println("uid :" + uid);
 		String toMail = email;
 		String title = "[마이닭]회원가입 인증번호 발송";
 		String content = "";

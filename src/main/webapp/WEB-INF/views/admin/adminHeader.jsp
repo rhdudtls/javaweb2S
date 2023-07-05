@@ -11,7 +11,7 @@
 <body>
 <div class="row">
 	<div class="col-1 mt-2 ml-2">
-		<img src="${ctp}/images/adminLogo.jpg" width="200px"/>
+		<img src="${ctp}/images/admin.jpg" width="200px"/>
 	</div>
 </div>
 </body>
