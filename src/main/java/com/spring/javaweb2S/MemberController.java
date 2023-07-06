@@ -107,6 +107,10 @@ public class MemberController {
 		if(emailAgree.equals("on")) vo.setSnsCheck("YES");
 		else vo.setSnsCheck("NO");
 		
+		if(vo.getGender() == null) {
+			vo.setGender("미선택");
+		}
+		
 		if(memberService.getMemberDupliCheck(vo.getMid(), "mid") != null) return "redirect:/message/idCheckNo";
 		if(memberService.getMemberDupliCheck(vo.getNickName(), "nickName") != null) return "redirect:/message/nickCheckNo";
 		if(memberService.getMemberDupliCheck(vo.getTel(), "tel") != null) return "redirect:/message/telCheckNo";

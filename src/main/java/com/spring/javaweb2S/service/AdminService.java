@@ -12,5 +12,11 @@ public interface AdminService {
 	
 	public int setMemberDel(int idx);
 
+	public ArrayList<MemberVO> getMemberList(String searchType, String searchString);
+
+	public int setLevelUpdate(int idx, int level);
+
+	public int setPointUpdate(int idx, int point);
+
 
 }

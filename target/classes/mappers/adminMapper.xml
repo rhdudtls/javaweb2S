@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.spring.javaweb2S.dao.AdminDAO">
 	<select id="getMemberList" resultType="com.spring.javaweb2S.vo.MemberVO">
-		select * from md_member order by idx desc;
+		select * from md_member <if test="searchType != null and searchString != null">where ${searchType} like concat('%', #{searchString}, '%')</if> order by idx desc;
 	</select>
 	
 	<delete id="setMemberDel">
@@ -14,5 +14,13 @@
 			memberDel = 'YES';
 		</if>
 	</delete>
+	
+	<update id="setLevelUpdate">
+		update md_member set level = #{level} where idx = #{idx};
+	</update>
+	
+	<update id="setPointUpdate">
+		update md_member set point = #{point} where idx = #{idx};
+	</update>
 	
 </mapper>

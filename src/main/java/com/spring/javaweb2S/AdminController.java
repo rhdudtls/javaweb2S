@@ -35,6 +35,17 @@ public class AdminController {
 	}
 	
 	@ResponseBody
+	@RequestMapping(value = "/adMemberList", method = RequestMethod.POST)
+	public ArrayList<MemberVO> adMemberListPost(Model model,
+			@RequestParam(name="searchType", defaultValue = "", required = false)String searchType,
+			@RequestParam(name="searchString", defaultValue = "", required = false)String searchString) {
+		
+		ArrayList<MemberVO> vosSearch = adminService.getMemberList(searchType, searchString);
+		
+		return vosSearch;
+	}
+	
+	@ResponseBody
 	@RequestMapping(value = "/memberDelete", method = RequestMethod.POST)
 	public String memberDeletePost(@RequestParam(name="idx", defaultValue = "0", required = false)int idx) {
 		int res1 = 0, res2 = 0;
@@ -51,4 +62,29 @@ public class AdminController {
 		if(res1 >= 0 || res2 >= 1) return "1";
 		else return "0";
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/adLevelUpdate", method = RequestMethod.POST)
+	public String adLevelUpdatePost(
+			@RequestParam(name="idx", defaultValue = "0", required = false)int idx,
+			@RequestParam(name="level", defaultValue = "4", required = false)int level) {
+		
+		int res = adminService.setLevelUpdate(idx, level);
+		
+		if(res == 1) return "1";
+		else return "0";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/adPointUpdate", method = RequestMethod.POST)
+	public String adPointUpdatePost(
+			@RequestParam(name="idx", defaultValue = "0", required = false)int idx,
+			@RequestParam(name="point", defaultValue = "0", required = false)int point) {
+		
+		int res = adminService.setPointUpdate(idx, point);
+		
+		if(res == 1) return "1";
+		else return "0";
+	}
+	
 }

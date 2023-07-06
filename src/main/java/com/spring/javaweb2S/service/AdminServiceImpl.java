@@ -18,6 +18,11 @@ public class AdminServiceImpl implements AdminService {
 	public ArrayList<MemberVO> getMemberList() {
 		return adminDAO.getMemberList();
 	}
+	
+	@Override
+	public ArrayList<MemberVO> getMemberList(String searchType, String searchString) {
+		return adminDAO.getMemberList(searchType, searchString);
+	}
 
 	@Override
 	public int setMemberDel(int idx) {
@@ -28,4 +33,15 @@ public class AdminServiceImpl implements AdminService {
 	public int setMemberDel() {
 		return adminDAO.setMemberDel();
 	}
+
+	@Override
+	public int setLevelUpdate(int idx, int level) {
+		return adminDAO.setLevelUpdate(idx, level);
+	}
+
+	@Override
+	public int setPointUpdate(int idx, int point) {
+		return adminDAO.setPointUpdate(idx, point);
+	}
+
 }
