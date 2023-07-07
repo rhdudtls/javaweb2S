@@ -18,5 +18,7 @@ public interface AdminService {
 
 	public int setPointUpdate(int idx, int point);
 
+	public MemberVO getMemberInfo(int idx);
+
 
 }

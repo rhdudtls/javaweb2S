@@ -32,6 +32,20 @@
 			text-decoration: none !important;
 			color:gray !important;
 		}
+		.whole_category_main {
+			padding-left:30px;
+			height:53px;
+			color: #000000;
+		}
+		
+		.whole_category_main:hover {
+			background-color: #2C3333;
+			color : white;
+		}
+		
+		.whole_category_main:hover .idvline{
+			color : #2C3333 !important;
+		}
 	</style>
 </head>
 <body>
@@ -67,16 +81,20 @@
 			</div>
 		</div>
 	</div>
-	<div class="row category mt-5">
+	<div class="row mt-4" style="line-height:50px">
 		<div class="col-8">
-			<span><i class="fa-solid fa-bars fa-2x" style="color: #000000;">&nbsp;</i></span>
-			<span class="whole_category">전체 카테고리</span>
-			<span class="category_left"style="font-size:18px; color:gray; margin-left:25px;">|&nbsp;&nbsp;</span>
-			<span class="category_left">신제품</span>
-			<span class="category_left">베스트</span>
-			<span class="category_left">할인특가</span>
-			<span class="category_left">1팩담기</span>
-			<span class="category_left">식사대용</span>
+			<div class="row">
+				<div class="whole_category_main pb-0 mb-0">
+					<span><i class="fa-solid fa-bars fa-2x" style="padding-top:10px;">&nbsp;</i></span>
+					<span class="whole_category" style="margin-right:25px;">전체 카테고리</span>
+					<span class="category_left idvline" style="font-size:18px; color:gray; margin-right:0px">|</span>
+				</div>
+				<span class="category_left" style="margin-left:28px;">신제품</span>
+				<span class="category_left">베스트</span>
+				<span class="category_left">할인특가</span>
+				<span class="category_left">1팩담기</span>
+				<span class="category_left">식사대용</span>
+			</div>
 		</div>
 		<div class="col-4 text-right category_right">
 			<c:if test="${level < 0 || level > 3}">
@@ -93,6 +111,5 @@
 		</div>
 	</div>
 </div>
-<p></p>
 </body>
 </html>

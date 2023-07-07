@@ -20,5 +20,7 @@ public interface AdminDAO {
 
 	public int setPointUpdate(@Param("idx")int idx, @Param("point")int point);
 
+	public MemberVO getMemberInfo(@Param("idx")int idx);
+
 
 }

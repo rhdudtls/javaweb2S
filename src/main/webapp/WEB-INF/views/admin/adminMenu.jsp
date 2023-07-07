@@ -41,7 +41,7 @@
     </div>
     <button type="button" class="collapsible" onclick="collapse(this);">상품 관리</button>
     <div class="content">
-        <p>내용 2 입니다.</p>
+         <p><a href="${ctp}/admin/productInput">상품 등록</a><p>
     </div>
     <button type="button" class="collapsible" onclick="collapse(this);">뭐할까</button>
     <div class="content">

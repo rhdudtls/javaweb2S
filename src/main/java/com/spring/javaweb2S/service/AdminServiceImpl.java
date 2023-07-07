@@ -44,4 +44,9 @@ public class AdminServiceImpl implements AdminService {
 		return adminDAO.setPointUpdate(idx, point);
 	}
 
+	@Override
+	public MemberVO getMemberInfo(int idx) {
+		return adminDAO.getMemberInfo(idx);
+	}
+
 }

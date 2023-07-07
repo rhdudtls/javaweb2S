@@ -286,6 +286,36 @@
 			alert("포인트 수정 완료!");
 			location.reload();
 		}
+		
+		function getMemUpdateInfo(idx) {
+			let str = "";
+			$.ajax({
+				type:"post",
+				url : "${ctp}/admin/adMemberUpdateInfo",
+				dataType : "json",
+				data : {idx : idx},
+				success : function(vo) {
+					MemUpdateForm.mid.value = vo.mid;
+					MemUpdateForm.name.value = vo.name;
+					MemUpdateForm.nickName.value = vo.nickName;
+					MemUpdateForm.tel.value = vo.tel;
+					MemUpdateForm.email.value = vo.email;
+					MemUpdateForm.gender.value = vo.gender;
+					MemUpdateForm.birthday.value = vo.birthday;
+					MemUpdateForm.address.value = vo.address;
+					MemUpdateForm.level.value = vo.level;
+					MemUpdateForm.memberDel.value = vo.memberDel;
+					MemUpdateForm.lastVisitDate.value = vo.lastVisitDate;
+					MemUpdateForm.point.value = vo.point;
+					MemUpdateForm.snsCheck.value = vo.snsCheck;
+					document.getElementById('uModalBtn').click();
+					$("#memUpdateModal").css("display", "block");
+				},
+				error : function() {
+					alert("전송 오류!");
+				}
+			});
+		}
 	</script>
 </head>
 <body style="background-color:#EEF1FF">
@@ -374,13 +404,14 @@
 					<td ondblclick="pointUpdate(${vo.idx},${vo.point},1)" id="point_${vo.idx}">${vo.point}</td>
 					<td>${vo.snsCheck}</td>
 					<td>${fn:substring(vo.lastVisitDate,0,16)}</td>
-					<td><input type="button" value="정보수정" class="btn btn-warning btn-sm"/></td>
+					<td><input type="button" value="정보수정" onclick="getMemUpdateInfo(${vo.idx})" class="btn btn-warning btn-sm"/></td>
 					<td><input type="checkbox" name="memCheckbox" value="${vo.idx}"/></td>
 				</tr>
 			</c:forEach>
 		</table>
 	</div>
 	
+	<input type="button" id="uModalBtn" data-toggle="modal" data-target="#memUpdateModal" style="display:none"/>
 	<input type="button" id="sModalBtn" data-toggle="modal" data-target="#searchModal" style="display:none"/>
 	<!-- 회원검색 모달창 -->
 	<div class="modal fade" id="searchModal">
@@ -398,6 +429,82 @@
 	      	<div class="text-center mb-3">
 	      	</div>
 	        <div id="searchContent"></div>
+	      </div>
+	
+	      <!-- Modal footer -->
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+	      </div>
+	
+	    </div>
+	  </div>
+	</div>
+	<!-- 회원수정 모달창 -->
+	<div class="modal fade" id="memUpdateModal">
+	  <div class="modal-dialog modal-xl">
+	    <div class="modal-content">
+	
+	      <!-- Modal Header -->
+	      <div class="modal-header">
+	      	<div style="margin-left:500px; font-size:20px"><b>회원 정보 수정</b></div>
+	        <button type="button" class="close" data-dismiss="modal">&times;</button>
+	      </div>
+	
+	      <!-- Modal body -->
+	      <div class="modal-body">
+	      	<div class="mb-3">
+	      		<form name="MemUpdateForm" method="post">
+	      			<div class="row">
+	      				<div class="col">
+			      			<div>
+				      			 아이디  <input type="text" name="mid" id="mid" readonly class="form-control"/>
+			      			</div>
+			      			<div>
+				      			이름  <input type="text" name="name" id="name" readonly class="form-control"/>
+			      			</div>
+			      			<div>
+			      				닉네임  <input type="text" name="nickName" id="nickName" readonly class="form-control"/>
+			      			</div>
+			      			<div>
+			      				휴대전화  <input type="text" name="tel" id="tel" readonly class="form-control"/>
+			      			</div>
+			      			<div>
+			      				이메일  <input type="text" name="email" id="email" readonly class="form-control"/>
+			      			</div>
+			      			<div>
+			      				성별  <input type="text" name="gender" id="gender" readonly class="form-control"/>
+			      			</div>
+			      		</div>
+			      		<div class="col">
+			      			<div>
+			      				생년월일  <input type="text" name="birthday" id="birthday" readonly class="form-control"/>
+			      			</div>
+			      			<div>
+			      				주소  <input type="text" name="address" id="address" readonly class="form-control"/>
+			      			</div>
+			      			<div>
+			      				등급  <input type="text" name="level" id="level" readonly class="form-control"/>
+			      			</div>
+			      			
+			      			<div>
+			      				탈퇴신청유무  <input type="text" name="memberDel" id="memberDel" readonly class="form-control"/>
+			      			</div>
+			      			
+			      			<div>
+			      				마지막방문날짜  <input type="text" name="lastVisitDate" id="lastVisitDate" readonly class="form-control"/>
+			      			</div>
+			      			
+			      			<div>
+			      				포인트  <input type="text" name="point" id="point" readonly class="form-control"/>
+			      			</div>
+			      			
+			      			<div>
+			      				SNS 동의 여부  <input type="text" name="snsCheck" id="snsCheck" readonly class="form-control"/>
+			      			</div>
+			      		</div>
+	      			</div>
+	      		</form>
+	      	</div>
 	      </div>
 	
 	      <!-- Modal footer -->

@@ -12,4 +12,8 @@
 	<update id="setMemberLastVisitDate">
 		update md_member set lastVisitDate = now() where mid = #{vo.mid};
 	</update>
+	
+	<delete id="setMemberAutoDelete">
+		delete from md_member where memberDel = 'YES' and datediff(now(), lastVisitDate) > 30;
+	</delete>
 </mapper>

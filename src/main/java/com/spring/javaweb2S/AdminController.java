@@ -87,4 +87,19 @@ public class AdminController {
 		else return "0";
 	}
 	
+	@ResponseBody
+	@RequestMapping(value = "/adMemberUpdateInfo", method = RequestMethod.POST)
+	public MemberVO adMemberUpdateInfoPost(
+			@RequestParam(name="idx", defaultValue = "0", required = false)int idx) {
+		
+		MemberVO vo = adminService.getMemberInfo(idx);
+		
+		return vo;
+	}
+	
+	@RequestMapping(value = "/productInput", method = RequestMethod.GET)
+	public String productInputGet() {
+		return "admin/productInput";
+	}
+	
 }

@@ -27,4 +27,9 @@ public class MemberServiceImpl implements MemberService {
 		memberDAO.setMemberLastVisitDate(vo);
 	}
 
+	@Override
+	public void setMemberAutoDelete() {
+		memberDAO.setMemberAutoDelete();
+	}
+
 }

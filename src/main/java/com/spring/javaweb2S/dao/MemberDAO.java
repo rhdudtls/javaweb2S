@@ -12,5 +12,7 @@ public interface MemberDAO {
 
 	public void setMemberLastVisitDate(@Param("vo")MemberVO vo);
 
+	public void setMemberAutoDelete();
+
 
 }

@@ -10,5 +10,7 @@ public interface MemberService {
 
 	public void setMemberLastVisitDate(MemberVO vo);
 
+	public void setMemberAutoDelete();
+
 
 }

@@ -81,6 +81,12 @@ public class MemberController {
 				}
 			}
 			
+			// 관리자 로그인시 탈퇴 신청 후 30일 경과된 회원 자동 탈퇴
+			if(vo.getLevel() == 0) {
+				memberService.setMemberAutoDelete();
+			}
+			
+			//로그인시 최근 방문 날짜 갱신
 			memberService.setMemberLastVisitDate(vo);
 			return "redirect:/";
 		}

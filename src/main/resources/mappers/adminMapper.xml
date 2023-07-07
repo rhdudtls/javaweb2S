@@ -5,6 +5,10 @@
 		select * from md_member <if test="searchType != null and searchString != null">where ${searchType} like concat('%', #{searchString}, '%')</if> order by idx desc;
 	</select>
 	
+	<select id="getMemberInfo" resultType="com.spring.javaweb2S.vo.MemberVO">
+		select * from md_member where idx = #{idx};
+	</select>
+	
 	<delete id="setMemberDel">
 		delete from md_member where 
 		<if test="idx != null">
