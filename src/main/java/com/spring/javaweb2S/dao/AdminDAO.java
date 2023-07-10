@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.spring.javaweb2S.vo.CategoryMainVO;
 import com.spring.javaweb2S.vo.MemberVO;
 
 public interface AdminDAO {
@@ -21,6 +22,15 @@ public interface AdminDAO {
 	public int setPointUpdate(@Param("idx")int idx, @Param("point")int point);
 
 	public MemberVO getMemberInfo(@Param("idx")int idx);
+
+	public ArrayList<CategoryMainVO> getCategoryMainList();
+
+	public int setCategoryMainDelete(@Param("code")String code);
+
+	public int setCategoryMainUpdate(@Param("code")String code, @Param("name")String name);
+	
+	public CategoryMainVO getCategoryMainInfo(@Param("name")String name);
+
 
 
 }

@@ -41,10 +41,53 @@
 		.whole_category_main:hover {
 			background-color: #2C3333;
 			color : white;
+			:not(span, i) {
+				color:black;
+			}
+			
 		}
-		
 		.whole_category_main:hover .idvline{
 			color : #2C3333 !important;
+		}
+		
+		.whole_category_main:hover .menu {
+			display: block;
+		}
+		.menu {
+			display:none;
+			margin: -3px -928px 0px -30px;
+			height:350px;
+			border: 1px solid black;
+			z-index:2;
+			position:relative;
+			background-color: white;
+		}
+		
+		.menu a:hover{
+			color:black;
+			text-decoration: none;
+		}
+		
+		.division1 {
+			display:inline-block;
+			width:180px;
+			height:40px;
+			margin: 40px 0 0 20px;
+			background-color: #eee;
+			padding-left: 15px;
+			font-weight: bold;
+			line-height: 40px;
+		}
+		
+		.division1 > i{
+			float: right;
+			padding: 10px 5px 0 0;
+		}
+		
+		.division2 {
+			padding-left: 30px;
+			font-size: 13px;
+			line-height: 30px;
 		}
 	</style>
 </head>
@@ -88,6 +131,61 @@
 					<span><i class="fa-solid fa-bars fa-2x" style="padding-top:10px;">&nbsp;</i></span>
 					<span class="whole_category" style="margin-right:25px;">전체 카테고리</span>
 					<span class="category_left idvline" style="font-size:18px; color:gray; margin-right:0px">|</span>
+					<div class="menu" >
+						<div class="row">
+							<div class="col pr-0" style="width:200px;">
+								<a href="#" class="division1">닭가슴살 <i class="fa-solid fa-chevron-right"></i></a>
+								<div>
+									<div><a href="#" class="division2">스팀 /슬라이스</a></div>
+									<div><a href="#" class="division2">스팀 /슬라이스</a></div>
+									<div><a href="#" class="division2">스팀 /슬라이스</a></div>
+									<div><a href="#" class="division2">스팀 /슬라이스</a></div>
+									<div><a href="#" class="division2">스팀 /슬라이스</a></div>
+									<div><a href="#" class="division2">스팀 /슬라이스</a></div>
+								</div>
+							</div>
+							<div class="col pl-0 pr-0">
+								<a href="#" class="division1">닭가슴살 <i class="fa-solid fa-chevron-right"></i></a>
+								<div>
+									<div><a href="#" class="division2">스팀 /슬라이스</a></div>
+									<div><a href="#" class="division2">스팀 /슬라이스</a></div>
+									<div><a href="#" class="division2">스팀 /슬라이스</a></div>
+									<div><a href="#" class="division2">스팀 /슬라이스</a></div>
+									<div><a href="#" class="division2">스팀 /슬라이스</a></div>
+									<div><a href="#" class="division2">스팀 /슬라이스</a></div>
+								</div>
+							</div>
+							<div class="col pl-0 pr-0">
+								<a href="#" class="division1">닭가슴살 <i class="fa-solid fa-chevron-right"></i></a>
+								<div>
+									<div><a href="#" class="division2">스팀 /슬라이스</a></div>
+									<div><a href="#" class="division2">스팀 /슬라이스</a></div>
+									<div><a href="#" class="division2">스팀 /슬라이스</a></div>
+									<div><a href="#" class="division2">스팀 /슬라이스</a></div>
+									<div><a href="#" class="division2">스팀 /슬라이스</a></div>
+									<div><a href="#" class="division2">스팀 /슬라이스</a></div>
+								</div>
+							</div>
+							<div class="col pl-0 pr-0">
+								<a href="#" class="division1">닭가슴살 <i class="fa-solid fa-chevron-right"></i></a>
+								<div>
+									<div><a href="#" class="division2">스팀 /슬라이스</a></div>
+									<div><a href="#" class="division2">스팀 /슬라이스</a></div>
+									<div><a href="#" class="division2">스팀 /슬라이스</a></div>
+									<div><a href="#" class="division2">스팀 /슬라이스</a></div>
+									<div><a href="#" class="division2">스팀 /슬라이스</a></div>
+									<div><a href="#" class="division2">스팀 /슬라이스</a></div>
+								</div>
+							</div>
+							<div class="col pl-0 pr-0">
+								<div style="height:60px;"><a href="#" class="division1 lh-sm">단백질보충 <i class="fa-solid fa-chevron-right"></i></a></div>
+								<div style="height:60px;"><a href="#" class="division1 lh-sm">샐러드/고구마/견과류 <i class="fa-solid fa-chevron-right"></i></a></div>
+								<div style="height:60px;"><a href="#" class="division1 lh-sm">건강한 간식 <i class="fa-solid fa-chevron-right"></i></a></div>
+								<div style="height:60px;"><a href="#" class="division1 lh-sm">건강기능식품 <i class="fa-solid fa-chevron-right"></i></a></div>
+								<div style="height:60px;"><a href="#" class="division1 lh-sm">미에르 <i class="fa-solid fa-chevron-right"></i></a></div>
+							</div>
+						</div>
+					</div>
 				</div>
 				<span class="category_left" style="margin-left:28px;">신제품</span>
 				<span class="category_left">베스트</span>

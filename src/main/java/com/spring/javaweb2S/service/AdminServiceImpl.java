@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.spring.javaweb2S.dao.AdminDAO;
+import com.spring.javaweb2S.vo.CategoryMainVO;
 import com.spring.javaweb2S.vo.MemberVO;
 
 @Service
@@ -47,6 +48,26 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public MemberVO getMemberInfo(int idx) {
 		return adminDAO.getMemberInfo(idx);
+	}
+
+	@Override
+	public ArrayList<CategoryMainVO> getCategoryMainList() {
+		return adminDAO.getCategoryMainList();
+	}
+
+	@Override
+	public int setCategoryMainDelete(String code) {
+		return adminDAO.setCategoryMainDelete(code);
+	}
+
+	@Override
+	public int setCategoryMainUpdate(String code, String name) {
+		return adminDAO.setCategoryMainUpdate(code, name);
+	}
+
+	@Override
+	public CategoryMainVO getCategoryMainInfo(String name) {
+		return adminDAO.getCategoryMainInfo(name);
 	}
 
 }

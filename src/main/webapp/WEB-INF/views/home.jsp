@@ -40,7 +40,7 @@
 </head>
 <body>
 <jsp:include page="/WEB-INF/views/include/header.jsp"/>
-<div id="demo" class="carousel slide carousel-fade text-center mt-0 pt-0" data-ride="carousel">
+<div id="demo" class="carousel slide carousel-fade text-center mt-0 pt-0" data-ride="carousel" style="position:relative; z-index:1;">
 	<!-- Indicators -->
 	<ul class="carousel-indicators" style="padding-right:40px;">
 		<li data-target="#demo" data-slide-to="0" class="active"></li>

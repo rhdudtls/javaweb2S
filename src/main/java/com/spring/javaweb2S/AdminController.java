@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.spring.javaweb2S.service.AdminService;
+import com.spring.javaweb2S.vo.CategoryMainVO;
 import com.spring.javaweb2S.vo.MemberVO;
 
 @Controller
@@ -100,6 +101,49 @@ public class AdminController {
 	@RequestMapping(value = "/productInput", method = RequestMethod.GET)
 	public String productInputGet() {
 		return "admin/productInput";
+	}
+	
+	@RequestMapping(value = "/d1Management", method = RequestMethod.GET)
+	public String d1ManagementGet(Model model) {
+		
+		ArrayList<CategoryMainVO> vos = adminService.getCategoryMainList(); 
+		
+		model.addAttribute("vos", vos);
+		return "admin/d1Management";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/categoryMainDelete", method = RequestMethod.POST)
+	public String categoryMainDeletePost(
+			@RequestParam(name="code", defaultValue = "", required = false)String code) {
+		
+		int res = adminService.setCategoryMainDelete(code);
+		
+		if(res == 1) return "1";
+		else return "0";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/categoryMainUpdate", method = RequestMethod.POST, produces="application/text; charset=utf8")
+	public String categoryMainUpdatePost(
+			@RequestParam(name="code", defaultValue = "", required = false)String code,
+			@RequestParam(name="name", defaultValue = "", required = false)String name) {
+		
+		CategoryMainVO vo = adminService.getCategoryMainInfo(name);
+		
+		if(vo != null) { 
+			if(vo.getCategoryMainCode().equals(code)) {
+				return "수정사항이 없습니다.";
+			}
+			else {
+				return "대분류명이 이미 존재합니다. 대분류명은 중복될 수 없습니다.";
+			}
+		}
+
+		int res = adminService.setCategoryMainUpdate(code, name);
+		
+		if(res == 1) return "수정 완료!";
+		else return "수정 실패!";
 	}
 	
 }

@@ -38,7 +38,7 @@ div.left {
     background-color: black;
 }
 .content {
-    padding: 0 0 0 77px;
+    padding: 0 0 0 72px;
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.2s ease-out;

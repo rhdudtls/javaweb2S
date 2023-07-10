@@ -9,6 +9,14 @@
 		select * from md_member where idx = #{idx};
 	</select>
 	
+	<select id="getCategoryMainList" resultType="com.spring.javaweb2S.vo.CategoryMainVO">
+		select * from md_categoryMain order by categoryMainCode;
+	</select>
+	
+	<select id="getCategoryMainInfo" resultType="com.spring.javaweb2S.vo.CategoryMainVO">
+		select * from md_categoryMain where categoryMainName = #{name};
+	</select>
+	
 	<delete id="setMemberDel">
 		delete from md_member where 
 		<if test="idx != null">
@@ -19,12 +27,20 @@
 		</if>
 	</delete>
 	
+	<delete id="setCategoryMainDelete">
+		delete from md_categoryMain where categoryMainCode = #{code};
+	</delete>
+	
 	<update id="setLevelUpdate">
 		update md_member set level = #{level} where idx = #{idx};
 	</update>
 	
 	<update id="setPointUpdate">
 		update md_member set point = #{point} where idx = #{idx};
+	</update>
+	
+	<update id="setCategoryMainUpdate">
+		update md_categoryMain set categoryMainName = #{name} where categoryMainCode = #{code};
 	</update>
 	
 </mapper>
