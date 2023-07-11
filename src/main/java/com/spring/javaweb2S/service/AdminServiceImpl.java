@@ -1,12 +1,18 @@
 package com.spring.javaweb2S.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.spring.javaweb2S.dao.AdminDAO;
 import com.spring.javaweb2S.vo.CategoryMainVO;
+import com.spring.javaweb2S.vo.CategorySubVO;
 import com.spring.javaweb2S.vo.MemberVO;
 
 @Service
@@ -56,11 +62,6 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public int setCategoryMainDelete(String code) {
-		return adminDAO.setCategoryMainDelete(code);
-	}
-
-	@Override
 	public int setCategoryMainUpdate(String code, String name) {
 		return adminDAO.setCategoryMainUpdate(code, name);
 	}
@@ -69,5 +70,38 @@ public class AdminServiceImpl implements AdminService {
 	public CategoryMainVO getCategoryMainInfo(String name) {
 		return adminDAO.getCategoryMainInfo(name);
 	}
+
+	@Override
+	public int getCategoryMainDupli(String flag, String[] arr) {
+		return adminDAO.getCategoryMainDupli(flag, arr);
+	}
+
+	@Override
+	public int setCategoryMainInput(String[] codeArr, String[] nameArr) {
+		
+		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+		for(int i = 0; i < codeArr.length; i++) {
+			HashMap<String, String> map= new HashMap<>();
+
+			map.put("code", codeArr[i]);
+
+			map.put("name", nameArr[i]);
+			
+			list.add(map);
+		}
+		
+		return adminDAO.setCategoryMainInput(list);
+	}
+
+	@Override
+	public ArrayList<CategorySubVO> getCategorySubList() {
+		return adminDAO.getCategorySubList();
+	}
+
+	@Override
+	public int setCategoryDelete(String flag, String code) {
+		return adminDAO.setCategoryDelete(flag, code);
+	}
+
 
 }

@@ -59,7 +59,3 @@ div.left {
 	text-decoration: none;
 	color : #CCD5AE;
 }
-
-#delType:hover + #delOption{
-	display:inline-block;
-}

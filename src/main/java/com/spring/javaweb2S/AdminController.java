@@ -2,6 +2,8 @@ package com.spring.javaweb2S;
 
 import java.util.ArrayList;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.spring.javaweb2S.service.AdminService;
 import com.spring.javaweb2S.vo.CategoryMainVO;
+import com.spring.javaweb2S.vo.CategorySubVO;
 import com.spring.javaweb2S.vo.MemberVO;
 
 @Controller
@@ -113,17 +116,6 @@ public class AdminController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/categoryMainDelete", method = RequestMethod.POST)
-	public String categoryMainDeletePost(
-			@RequestParam(name="code", defaultValue = "", required = false)String code) {
-		
-		int res = adminService.setCategoryMainDelete(code);
-		
-		if(res == 1) return "1";
-		else return "0";
-	}
-	
-	@ResponseBody
 	@RequestMapping(value = "/categoryMainUpdate", method = RequestMethod.POST, produces="application/text; charset=utf8")
 	public String categoryMainUpdatePost(
 			@RequestParam(name="code", defaultValue = "", required = false)String code,
@@ -142,8 +134,54 @@ public class AdminController {
 
 		int res = adminService.setCategoryMainUpdate(code, name);
 		
-		if(res == 1) return "수정 완료!";
-		else return "수정 실패!";
+		if(res == 1) return "대분류 수정 완료!";
+		else return "대분류 수정 실패!";
 	}
 	
+	@ResponseBody
+	@RequestMapping(value = "/categoryMainInput", method = RequestMethod.POST, produces="application/text; charset=utf8")
+	public String categoryMainInputPost(HttpServletRequest request) {
+		
+		String[] codeArr = request.getParameterValues("codeArr");
+		String[] nameArr = request.getParameterValues("nameArr");
+		
+		int codeCnt = adminService.getCategoryMainDupli("categoryMainCode", codeArr);
+		int nameCnt = adminService.getCategoryMainDupli("categoryMainName", nameArr);
+		
+		if(codeCnt != 0 || nameCnt != 0) {
+			return "입력된 대분류 코드 또는 대분류명이 중복되었습니다. 다시 확인하세요.";
+		}
+		
+		int res = adminService.setCategoryMainInput(codeArr, nameArr);
+		
+		
+		if(res >= 1) return "대분류가 추가되었습니다.";
+		else return "대분류 추가 실패";
+		
+	}
+	
+	@RequestMapping(value = "/d2Management", method = RequestMethod.GET)
+	public String d2ManagementGet(Model model) {
+		
+		ArrayList<CategoryMainVO> vosMain = adminService.getCategoryMainList(); 
+		ArrayList<CategorySubVO> vosSub = adminService.getCategorySubList();
+		
+		model.addAttribute("vosMain", vosMain);
+		model.addAttribute("vosSub", vosSub);
+		
+		return "admin/d2Management";
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/categoryDelete", method = RequestMethod.POST)
+	public String categorySubDeletePost(
+			@RequestParam(name="code", defaultValue = "", required = false)String code,
+			@RequestParam(name="flag", defaultValue = "", required = false)String flag) {
+		
+		int res = adminService.setCategoryDelete(flag, code);
+		
+		if(res == 1) return "1";
+		else return "0";
+	}
+
 }

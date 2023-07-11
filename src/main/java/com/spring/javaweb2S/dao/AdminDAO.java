@@ -1,10 +1,13 @@
 package com.spring.javaweb2S.dao;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
 import com.spring.javaweb2S.vo.CategoryMainVO;
+import com.spring.javaweb2S.vo.CategorySubVO;
 import com.spring.javaweb2S.vo.MemberVO;
 
 public interface AdminDAO {
@@ -25,12 +28,16 @@ public interface AdminDAO {
 
 	public ArrayList<CategoryMainVO> getCategoryMainList();
 
-	public int setCategoryMainDelete(@Param("code")String code);
-
 	public int setCategoryMainUpdate(@Param("code")String code, @Param("name")String name);
 	
 	public CategoryMainVO getCategoryMainInfo(@Param("name")String name);
 
+	public int getCategoryMainDupli(@Param("flag")String flag, @Param("arr")String[] arr);
 
+	public int setCategoryMainInput(@Param("list")List<Map<String, String>> list);
+
+	public ArrayList<CategorySubVO> getCategorySubList();
+
+	public int setCategoryDelete(@Param("flag")String flag, @Param("code")String code);
 
 }

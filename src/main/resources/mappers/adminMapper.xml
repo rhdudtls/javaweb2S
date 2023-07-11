@@ -10,12 +10,28 @@
 	</select>
 	
 	<select id="getCategoryMainList" resultType="com.spring.javaweb2S.vo.CategoryMainVO">
-		select * from md_categoryMain order by categoryMainCode;
+		select *, (select count(*) from md_categorySub as s where m.categoryMainCode = s.categoryMainCode) as cnt from md_categoryMain as m group by categoryMainCode;
 	</select>
 	
 	<select id="getCategoryMainInfo" resultType="com.spring.javaweb2S.vo.CategoryMainVO">
 		select * from md_categoryMain where categoryMainName = #{name};
 	</select>
+	
+	<select id="getCategoryMainDupli" resultType="int">
+		select count(*) from md_categoryMain where ${flag} IN <foreach collection="arr" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+	</select>
+	
+	<select id="getCategorySubList" resultType="com.spring.javaweb2S.vo.CategorySubVO">
+		select * from md_categorySub;
+	</select>
+	
+	<insert id="setCategoryMainInput" parameterType="java.util.Map">
+		insert into md_categoryMain values<foreach collection="list" item="item" separator=",">
+            (#{item.code},#{item.name})
+        </foreach>
+	</insert>
 	
 	<delete id="setMemberDel">
 		delete from md_member where 
@@ -27,8 +43,15 @@
 		</if>
 	</delete>
 	
-	<delete id="setCategoryMainDelete">
-		delete from md_categoryMain where categoryMainCode = #{code};
+	<delete id="setCategoryDelete">
+		delete from 
+		<if test='flag == "categoryMainCode"'>
+			md_categoryMain
+		</if>
+		<if test='flag == "categorySubCode"'>
+			md_categorySub
+		</if>
+		where ${flag} = #{code};
 	</delete>
 	
 	<update id="setLevelUpdate">

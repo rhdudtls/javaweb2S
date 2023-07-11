@@ -6,4 +6,6 @@ import lombok.Data;
 public class CategoryMainVO {
 	private String categoryMainCode;
 	private String categoryMainName;
+	
+	private int cnt;
 }

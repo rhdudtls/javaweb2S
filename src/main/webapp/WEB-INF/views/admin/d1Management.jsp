@@ -14,17 +14,15 @@
 		#categoryMain {
 			padding : 30px 0 0 30px;
 			width:500px;
-			height:700px;
+			height:741px;
 			border: 1px solid lightgray;
 			font-size:20px;
 			line-height: 50px;
 		}
-		
 		#categoryMain a{
 			color:black;
 			text-decoration: none;
 		}
-		
 		.inputUd {
 			width:200px;
 			height:40px;
@@ -68,11 +66,11 @@
 			
 			$.ajax({
 				type : "post",
-				url : "${ctp}/admin/categoryMainDelete",
-				data : {code : code},
+				url : "${ctp}/admin/categoryDelete",
+				data : {flag : "categoryMainCode", code : code},
 				success : function(res) {
-					if(res == "1") alert("삭제 완료!");
-					else alert("삭제 실패!");
+					if(res == "1") alert("대분류 삭제 완료!");
+					else alert("대분류 삭제 실패!");
 					location.reload();
 				},
 				error : function() {
@@ -142,12 +140,13 @@
 		}
 		
 		function categoryMainInput() {
-			let map = new Map();
+			let codeArr = [];
+			let nameArr = [];
 			
 			let codeReg = /^[a-zA-Z]$/;
 			
 			for(let i = 1; i <= count; i++) {
-				let code = $("#codeIn"+i).val();
+				let code = $("#codeIn"+i).val().toUpperCase();
 				let name = $("#nameIn"+i).val();
 				
 				if(code.trim() == "") {
@@ -162,11 +161,27 @@
 					alert("대분류명을 입력하세요!");
 					return false;
 				}
-				
-				map.set
-				
+				else if(codeArr.indexOf(code) != -1 || nameArr.indexOf(name) != -1) {
+					alert("입력된 대분류 코드 또는 대분류명이 중복되었습니다. 다시 확인하세요.");
+					return false;
+				}
+				codeArr.push(code);
+				nameArr.push(name);
 			}
 			
+			$.ajax({
+				type : "post",
+				url : "${ctp}/admin/categoryMainInput",
+				traditional: true,
+				data : {codeArr : codeArr, nameArr : nameArr},
+				success : function(res) {
+					alert(res);
+					location.reload();
+				},
+				error : function() {
+					alert("전송오류!");
+				}
+			});
 			
 		}
 	</script>

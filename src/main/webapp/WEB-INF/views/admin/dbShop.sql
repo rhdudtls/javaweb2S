@@ -13,9 +13,17 @@ create table md_categorySub (
 	foreign key(categoryMainCode) references md_categoryMain(categoryMainCode)
 );
 
+
+select *, (select count(*) from md_categorySub as s where m.categoryMainCode = s.categoryMainCode) as cnt from md_categoryMain as m group by categoryMainCode;
+
+select count(*) as cnt from md_categorySub group by categoryMainCode;
 insert into md_categoryMain values('A', '닭가슴살');
 insert into md_categoryMain values('B', '간편밥류');
 insert into md_categoryMain values('C', '닭가슴살 간식');
 insert into md_categoryMain values('D', '소고기');
 
+insert into md_categorySub values('A', '001', '스팀 / 슬라이스');
+insert into md_categorySub values('A', '002', '스테이크 / 치킨');
+insert into md_categorySub values('B', '003', '한끼 도시락');
+insert into md_categorySub values('C', '004', '크리스피칩');
 drop table categoryMain;
