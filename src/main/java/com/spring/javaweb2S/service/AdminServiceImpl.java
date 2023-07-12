@@ -72,8 +72,8 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public int getCategoryMainDupli(String flag, String[] arr) {
-		return adminDAO.getCategoryMainDupli(flag, arr);
+	public int getCategoryDupli(String db, String flag, String[] arr) {
+		return adminDAO.getCategoryDupli(db, flag, arr);
 	}
 
 	@Override
@@ -84,7 +84,6 @@ public class AdminServiceImpl implements AdminService {
 			HashMap<String, String> map= new HashMap<>();
 
 			map.put("code", codeArr[i]);
-
 			map.put("name", nameArr[i]);
 			
 			list.add(map);
@@ -101,6 +100,37 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public int setCategoryDelete(String flag, String code) {
 		return adminDAO.setCategoryDelete(flag, code);
+	}
+
+	@Override
+	public int getCategorySubDupli(String flag, String sub) {
+		return adminDAO.getCategorySubDupli(flag, sub);
+	}
+
+	@Override
+	public int setCategorySubUpdate(String mName, String sCode, String sName, String originSCode) {
+		return adminDAO.setCategorySubUpdate(mName, sCode, sName, originSCode);
+	}
+
+	@Override
+	public int setCategorySubInput(String[] sCodeArr, String[] sNameArr, String[] mCodeArr) {
+		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+		for(int i = 0; i < sCodeArr.length; i++) {
+			HashMap<String, String> map= new HashMap<>();
+
+			map.put("sCode", sCodeArr[i]);
+			map.put("sName", sNameArr[i]);
+			map.put("mCode", mCodeArr[i]);
+			
+			list.add(map);
+		}
+		
+		return adminDAO.setCategorySubInput(list);
+	}
+
+	@Override
+	public ArrayList<CategorySubVO> getCategorySubName(String mainCode) {
+		return adminDAO.getCategorySubName(mainCode);
 	}
 
 

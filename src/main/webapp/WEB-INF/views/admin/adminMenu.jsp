@@ -37,7 +37,7 @@
 	<h3 class="text-light text-center mt-4 mb-4 ml-0">MY DAK🍗</h3>
 	<button type="button" class="collapsible" onclick="collapse(this);">회원 관리</button>
     <div class="content">
-       <p><a href="${ctp}/admin/adMemberList">회원 목록</a><p>
+       <p style="padding-left:5px;"><a href="${ctp}/admin/adMemberList">회원 목록</a><p>
     </div>
     <button type="button" class="collapsible" onclick="collapse(this);">상품 관리</button>
     <div class="content">

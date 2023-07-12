@@ -102,7 +102,10 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value = "/productInput", method = RequestMethod.GET)
-	public String productInputGet() {
+	public String productInputGet(Model model) {
+		ArrayList<CategoryMainVO> vosMain = adminService.getCategoryMainList();
+		
+		model.addAttribute("vosMain", vosMain);
 		return "admin/productInput";
 	}
 	
@@ -145,8 +148,8 @@ public class AdminController {
 		String[] codeArr = request.getParameterValues("codeArr");
 		String[] nameArr = request.getParameterValues("nameArr");
 		
-		int codeCnt = adminService.getCategoryMainDupli("categoryMainCode", codeArr);
-		int nameCnt = adminService.getCategoryMainDupli("categoryMainName", nameArr);
+		int codeCnt = adminService.getCategoryDupli("main", "categoryMainCode", codeArr);
+		int nameCnt = adminService.getCategoryDupli("main", "categoryMainName", nameArr);
 		
 		if(codeCnt != 0 || nameCnt != 0) {
 			return "입력된 대분류 코드 또는 대분류명이 중복되었습니다. 다시 확인하세요.";
@@ -183,5 +186,63 @@ public class AdminController {
 		if(res == 1) return "1";
 		else return "0";
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/categorySubUpdate", method = RequestMethod.POST)
+	public String categorySubUpdatePost(
+			@RequestParam(name="mName", defaultValue = "", required = false)String mName,
+			@RequestParam(name="originSCode", defaultValue = "", required = false)String originSCode,
+			@RequestParam(name="originSName", defaultValue = "", required = false)String originSName,
+			@RequestParam(name="sCode", defaultValue = "", required = false)String sCode,
+			@RequestParam(name="sName", defaultValue = "", required = false)String sName) {
+		
+		int codeCnt = 0, nameCnt = 0;
+		
+		if(!originSCode.equals(sCode)) codeCnt = adminService.getCategorySubDupli("categorySubCode", sCode);
+		if(!originSName.equals(sName)) nameCnt = adminService.getCategorySubDupli("categorySubName", sName);
+
+		if(codeCnt == 1 || nameCnt == 1) {
+			return "1";
+		}
+		
+		int res = adminService.setCategorySubUpdate(mName,sCode,sName,originSCode);
+		
+		if(res == 1) return "2";
+		else return "0";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/categorySubInput", method = RequestMethod.POST, produces="application/text; charset=utf8")
+	public String categorySubInputPost(HttpServletRequest request) {
+		
+		String[] sCodeArr = request.getParameterValues("sCodeArr");
+		String[] sNameArr = request.getParameterValues("sNameArr");
+		String[] mCodeArr = request.getParameterValues("mCodeArr");
+		
+		int codeCnt = adminService.getCategoryDupli("sub", "categorySubCode", sCodeArr);
+		int nameCnt = adminService.getCategoryDupli("sub", "categorySubName", sNameArr);
+		
+		if(codeCnt != 0 || nameCnt != 0) {
+			return "1";
+		}
+		
+		int res = adminService.setCategorySubInput(sCodeArr, sNameArr, mCodeArr);
+		
+		
+		if(res >= 1) return "2";
+		else return "0";
+		
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/getCategorySubName", method = RequestMethod.POST)
+	public ArrayList<CategorySubVO> categorySubDeletePost(
+			@RequestParam(name="mainCode", defaultValue = "", required = false)String mainCode) {
+		
+		ArrayList<CategorySubVO> vos = adminService.getCategorySubName(mainCode);
+		
+		return vos;
+	}
+
 
 }

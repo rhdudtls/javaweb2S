@@ -28,12 +28,20 @@ public interface AdminService {
 
 	public CategoryMainVO getCategoryMainInfo(String name);
 
-	public int getCategoryMainDupli(String flag, String[] arr);
+	public int getCategoryDupli(String db, String flag, String[] arr);
 
 	public int setCategoryMainInput(String[] codeArr, String[] nameArr);
 
 	public ArrayList<CategorySubVO> getCategorySubList();
 
 	public int setCategoryDelete(String flag, String code);
+
+	public int getCategorySubDupli(String string, String sub);
+
+	public int setCategorySubUpdate(String mName, String sCode, String sName, String originSCode);
+
+	public int setCategorySubInput(String[] sCodeArr, String[] sNameArr, String[] mCodeArr);
+
+	public ArrayList<CategorySubVO> getCategorySubName(String mainCode);
 
 }

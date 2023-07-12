@@ -32,12 +32,20 @@ public interface AdminDAO {
 	
 	public CategoryMainVO getCategoryMainInfo(@Param("name")String name);
 
-	public int getCategoryMainDupli(@Param("flag")String flag, @Param("arr")String[] arr);
+	public int getCategoryDupli(@Param("db")String db, @Param("flag")String flag, @Param("arr")String[] arr);
 
 	public int setCategoryMainInput(@Param("list")List<Map<String, String>> list);
 
 	public ArrayList<CategorySubVO> getCategorySubList();
 
 	public int setCategoryDelete(@Param("flag")String flag, @Param("code")String code);
+
+	public int getCategorySubDupli(@Param("flag")String flag, @Param("sub")String sub);
+
+	public int setCategorySubUpdate(@Param("mName")String mName, @Param("sCode")String sCode, @Param("sName")String sName, @Param("originSCode")String originSCode);
+
+	public int setCategorySubInput(@Param("list")List<Map<String, String>> list);
+
+	public ArrayList<CategorySubVO> getCategorySubName(@Param("mainCode")String mainCode);
 
 }

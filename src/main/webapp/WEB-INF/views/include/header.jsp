@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <c:set var="ctp" value="${pageContext.request.contextPath}"/>
 <%
 	int level = session.getAttribute("sLevel")==null? 99 : (int)session.getAttribute("sLevel");
@@ -133,57 +134,72 @@
 					<span class="category_left idvline" style="font-size:18px; color:gray; margin-right:0px">|</span>
 					<div class="menu" >
 						<div class="row">
-							<div class="col pr-0" style="width:200px;">
-								<a href="#" class="division1">닭가슴살 <i class="fa-solid fa-chevron-right"></i></a>
-								<div>
-									<div><a href="#" class="division2">스팀 /슬라이스</a></div>
-									<div><a href="#" class="division2">스팀 /슬라이스</a></div>
-									<div><a href="#" class="division2">스팀 /슬라이스</a></div>
-									<div><a href="#" class="division2">스팀 /슬라이스</a></div>
-									<div><a href="#" class="division2">스팀 /슬라이스</a></div>
-									<div><a href="#" class="division2">스팀 /슬라이스</a></div>
+							<c:set var="count" value="1"/>
+							<c:forEach var="vom" items="${vosMain}" varStatus="stm">
+								<c:if test="${vom.cnt != 0 && count < 4}">
+									<c:set var="count" value="${count + 1}"/>
+									<div class="col pr-0" style="width:200px;">
+										<a href="#" class="division1">${vom.categoryMainName}<i class="fa-solid fa-chevron-right"></i></a>
+										<div>
+											<c:forEach var="vos" items="${vosSub}" varStatus="sts">
+												<c:if test="${vom.categoryMainCode == vos.categoryMainCode}">
+														<div><a href="#" class="division2">${vos.categorySubName}</a></div>
+												</c:if>
+											</c:forEach>
+										</div>
+									</div>
+								</c:if>
+							</c:forEach>
+							<c:set var="size" value="${fn:length(vosMain)}"/>
+							<c:if test="${(fn:length(vosMain)-3) > 6}">
+								<div class="col pr-0" style="width:200px;">
+									<c:forEach var="vom" items="${vosMain}" varStatus="stm">
+										<c:if test="${size <= fn:length(vosMain)-3 && size > 5}">
+											<div style="height:60px;"><a href="#" class="division1 lh-sm ml-2">${vom.categoryMainName}<i class="fa-solid fa-chevron-right"></i></a></div>
+											<c:set var="size" value="${size - 1}"/>
+										</c:if>
+										<c:if test="${size > fn:length(vosMain)-3}">
+											<c:set var="size" value="${size - 1}"/>
+										</c:if>
+									</c:forEach>
 								</div>
-							</div>
-							<div class="col pl-0 pr-0">
-								<a href="#" class="division1">닭가슴살 <i class="fa-solid fa-chevron-right"></i></a>
-								<div>
-									<div><a href="#" class="division2">스팀 /슬라이스</a></div>
-									<div><a href="#" class="division2">스팀 /슬라이스</a></div>
-									<div><a href="#" class="division2">스팀 /슬라이스</a></div>
-									<div><a href="#" class="division2">스팀 /슬라이스</a></div>
-									<div><a href="#" class="division2">스팀 /슬라이스</a></div>
-									<div><a href="#" class="division2">스팀 /슬라이스</a></div>
+								<c:set var="size" value="${fn:length(vosMain)}"/>
+								<div class="col pl-0 pr-0">
+									<c:forEach var="vom" items="${vosMain}" varStatus="stm">
+										<c:if test="${size <= 5}">
+											<div style="height:60px;"><a href="#" class="division1 lh-sm ml-2">${vom.categoryMainName}<i class="fa-solid fa-chevron-right"></i></a></div>
+										</c:if>
+										<c:if test="${size > 5}">
+											<c:set var="size" value="${size - 1}"/>
+										</c:if>
+									</c:forEach>
 								</div>
-							</div>
-							<div class="col pl-0 pr-0">
-								<a href="#" class="division1">닭가슴살 <i class="fa-solid fa-chevron-right"></i></a>
-								<div>
-									<div><a href="#" class="division2">스팀 /슬라이스</a></div>
-									<div><a href="#" class="division2">스팀 /슬라이스</a></div>
-									<div><a href="#" class="division2">스팀 /슬라이스</a></div>
-									<div><a href="#" class="division2">스팀 /슬라이스</a></div>
-									<div><a href="#" class="division2">스팀 /슬라이스</a></div>
-									<div><a href="#" class="division2">스팀 /슬라이스</a></div>
+							</c:if>
+							<c:set var="size" value="${fn:length(vosMain)}"/>
+							<c:if test="${(fn:length(vosMain)-3) <= 6}">
+								<div class="col pr-0" style="width:200px;">
+									<c:forEach var="vom" items="${vosMain}" varStatus="stm">
+										<c:if test="${size > fn:length(vosMain)-4}">
+											<c:set var="size" value="${size - 1}"/>
+										</c:if>
+										<c:if test="${size == fn:length(vosMain)-4}">
+											<a href="#" class="division1">${vom.categoryMainName}<i class="fa-solid fa-chevron-right"></i></a>
+											<c:set var="size" value="${size - 1}"/>
+										</c:if>
+									</c:forEach>
 								</div>
-							</div>
-							<div class="col pl-0 pr-0">
-								<a href="#" class="division1">닭가슴살 <i class="fa-solid fa-chevron-right"></i></a>
-								<div>
-									<div><a href="#" class="division2">스팀 /슬라이스</a></div>
-									<div><a href="#" class="division2">스팀 /슬라이스</a></div>
-									<div><a href="#" class="division2">스팀 /슬라이스</a></div>
-									<div><a href="#" class="division2">스팀 /슬라이스</a></div>
-									<div><a href="#" class="division2">스팀 /슬라이스</a></div>
-									<div><a href="#" class="division2">스팀 /슬라이스</a></div>
+								<c:set var="size" value="${fn:length(vosMain)}"/>
+								<div class="col pl-0 pr-0">
+									<c:forEach var="vom" items="${vosMain}" varStatus="stm">
+										<c:if test="${size <= fn:length(vosMain)-4}">
+											<div style="height:60px;"><a href="#" class="division1 lh-sm ml-2">${vom.categoryMainName}<i class="fa-solid fa-chevron-right"></i></a></div>
+										</c:if>
+										<c:if test="${size > fn:length(vosMain)-4}">
+											<c:set var="size" value="${size - 1}"/>
+										</c:if>
+									</c:forEach>
 								</div>
-							</div>
-							<div class="col pl-0 pr-0">
-								<div style="height:60px;"><a href="#" class="division1 lh-sm">단백질보충 <i class="fa-solid fa-chevron-right"></i></a></div>
-								<div style="height:60px;"><a href="#" class="division1 lh-sm">샐러드/고구마/견과류 <i class="fa-solid fa-chevron-right"></i></a></div>
-								<div style="height:60px;"><a href="#" class="division1 lh-sm">건강한 간식 <i class="fa-solid fa-chevron-right"></i></a></div>
-								<div style="height:60px;"><a href="#" class="division1 lh-sm">건강기능식품 <i class="fa-solid fa-chevron-right"></i></a></div>
-								<div style="height:60px;"><a href="#" class="division1 lh-sm">미에르 <i class="fa-solid fa-chevron-right"></i></a></div>
-							</div>
+							</c:if>
 						</div>
 					</div>
 				</div>

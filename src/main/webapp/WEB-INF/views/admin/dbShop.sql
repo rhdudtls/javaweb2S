@@ -17,6 +17,9 @@ create table md_categorySub (
 select *, (select count(*) from md_categorySub as s where m.categoryMainCode = s.categoryMainCode) as cnt from md_categoryMain as m group by categoryMainCode;
 
 select count(*) as cnt from md_categorySub group by categoryMainCode;
+
+update md_categorySub set categoryMainCode = (select categoryMainCode from md_categoryMain where categoryMainName = '닭가슴살') where categorySubCode = '004';
+select categoryMainCode from md_categoryMain where categoryMainName = '닭가슴살';
 insert into md_categoryMain values('A', '닭가슴살');
 insert into md_categoryMain values('B', '간편밥류');
 insert into md_categoryMain values('C', '닭가슴살 간식');

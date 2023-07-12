@@ -10,15 +10,18 @@
 	</select>
 	
 	<select id="getCategoryMainList" resultType="com.spring.javaweb2S.vo.CategoryMainVO">
-		select *, (select count(*) from md_categorySub as s where m.categoryMainCode = s.categoryMainCode) as cnt from md_categoryMain as m group by categoryMainCode;
+		select *, (select count(*) from md_categorySub as s where m.categoryMainCode = s.categoryMainCode) as cnt from md_categoryMain as m group by categoryMainCode order by cnt desc, categoryMainName;
 	</select>
 	
 	<select id="getCategoryMainInfo" resultType="com.spring.javaweb2S.vo.CategoryMainVO">
 		select * from md_categoryMain where categoryMainName = #{name};
 	</select>
 	
-	<select id="getCategoryMainDupli" resultType="int">
-		select count(*) from md_categoryMain where ${flag} IN <foreach collection="arr" item="item" index="index" open="(" close=")" separator=",">
+	<select id="getCategoryDupli" resultType="int">
+		select count(*) from 
+		<if test='db =="main"'>md_categoryMain</if>
+		<if test='db =="sub"'>md_categorySub</if>
+		 where ${flag} IN <foreach collection="arr" item="item" index="index" open="(" close=")" separator=",">
             #{item}
         </foreach>
 	</select>
@@ -27,9 +30,23 @@
 		select * from md_categorySub;
 	</select>
 	
+	<select id="getCategorySubDupli" resultType="int">
+		select count(*) from md_categorySub where ${flag} = #{sub};
+	</select>
+	
+	<select id="getCategorySubName" resultType="com.spring.javaweb2S.vo.CategorySubVO">
+		select * from md_categorySub where categoryMainCode = #{mainCode};
+	</select>
+	
 	<insert id="setCategoryMainInput" parameterType="java.util.Map">
 		insert into md_categoryMain values<foreach collection="list" item="item" separator=",">
             (#{item.code},#{item.name})
+        </foreach>
+	</insert>
+	
+	<insert id="setCategorySubInput" parameterType="java.util.Map">
+		insert into md_categorySub values<foreach collection="list" item="item" separator=",">
+			(#{item.mCode},#{item.sCode},#{item.sName})
         </foreach>
 	</insert>
 	
@@ -66,4 +83,8 @@
 		update md_categoryMain set categoryMainName = #{name} where categoryMainCode = #{code};
 	</update>
 	
+	<update id="setCategorySubUpdate">
+		update md_categorySub set categoryMainCode = (select categoryMainCode from md_categoryMain where categoryMainName = #{mName}),
+		categorySubCode = #{sCode}, categorySubName = #{sName} where categorySubCode = #{originSCode};
+	</update>
 </mapper>
