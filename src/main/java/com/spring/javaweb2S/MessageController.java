@@ -41,6 +41,14 @@ public class MessageController {
 			model.addAttribute("msg", "아이디와 비밀번호가 올바르지 않습니다.");
 			model.addAttribute("url", "/member/memberLogin");
 		}
+		else if(msgFlag.equals("productInputOk")) {
+			model.addAttribute("msg", "상품이 등록되었습니다.");
+			model.addAttribute("url", "/admin/productInput");
+		}
+		else if(msgFlag.equals("productInputNo")) {
+			model.addAttribute("msg", "같은 이름의 상품이 존재합니다. 다시 입력하세요.");
+			model.addAttribute("url", "/admin/productInput");
+		}
 		
 		
 		return "include/message";

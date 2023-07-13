@@ -2,9 +2,12 @@ package com.spring.javaweb2S.service;
 
 import java.util.ArrayList;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.spring.javaweb2S.vo.CategoryMainVO;
 import com.spring.javaweb2S.vo.CategorySubVO;
 import com.spring.javaweb2S.vo.MemberVO;
+import com.spring.javaweb2S.vo.ProductVO;
 
 public interface AdminService {
 
@@ -43,5 +46,13 @@ public interface AdminService {
 	public int setCategorySubInput(String[] sCodeArr, String[] sNameArr, String[] mCodeArr);
 
 	public ArrayList<CategorySubVO> getCategorySubName(String mainCode);
+
+	public void imgCheckProductInput(MultipartFile file, ProductVO vo);
+
+	public ProductVO getProductInfo(String productName);
+
+	public ArrayList<ProductVO> getMainName();
+
+	public ArrayList<ProductVO> getProductList(String part);
 
 }

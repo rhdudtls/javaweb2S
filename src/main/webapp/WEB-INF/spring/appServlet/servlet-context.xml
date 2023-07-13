@@ -17,6 +17,8 @@
 	<resources mapping="/css/**" location="/resources/css/" />
 	<resources mapping="/images/**" location="/resources/images/" />
 	<resources mapping="/js/**" location="/resources/js/" />
+	<resources mapping="/ckeditor/**" location="/resources/ckeditor/" />
+	<resources mapping="/data/**" location="/resources/data/" />
 
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -26,6 +28,10 @@
 	
 	<context:component-scan base-package="com.spring.javaweb2S" />
 	
-	
+	<!-- 파일업로드에 필요한 라이브러리를 Bean으로 등록(업로드 최대용량제한 : 20MByte) -->
+	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<beans:property name="maxUploadSize" value="20971520" />
+		<beans:property name="defaultEncoding" value="utf-8" />
+	</beans:bean>
 	
 </beans:beans>

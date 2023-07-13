@@ -1,8 +1,16 @@
 package com.spring.javaweb2S;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,11 +19,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.javaweb2S.service.AdminService;
 import com.spring.javaweb2S.vo.CategoryMainVO;
 import com.spring.javaweb2S.vo.CategorySubVO;
 import com.spring.javaweb2S.vo.MemberVO;
+import com.spring.javaweb2S.vo.ProductVO;
 
 @Controller
 @RequestMapping("/admin")
@@ -106,7 +116,7 @@ public class AdminController {
 		ArrayList<CategoryMainVO> vosMain = adminService.getCategoryMainList();
 		
 		model.addAttribute("vosMain", vosMain);
-		return "admin/productInput";
+		return "admin/shop/productInput";
 	}
 	
 	@RequestMapping(value = "/d1Management", method = RequestMethod.GET)
@@ -115,7 +125,7 @@ public class AdminController {
 		ArrayList<CategoryMainVO> vos = adminService.getCategoryMainList(); 
 		
 		model.addAttribute("vos", vos);
-		return "admin/d1Management";
+		return "admin/shop/d1Management";
 	}
 	
 	@ResponseBody
@@ -172,7 +182,7 @@ public class AdminController {
 		model.addAttribute("vosMain", vosMain);
 		model.addAttribute("vosSub", vosSub);
 		
-		return "admin/d2Management";
+		return "admin/shop/d2Management";
 	}
 
 	@ResponseBody
@@ -243,6 +253,60 @@ public class AdminController {
 		
 		return vos;
 	}
-
+	
+	// 관리자 상품등록시에 ckeditor에 그림을 올린다면 dbShop폴더에 저장되고, 저장된 파일을 브라우저 textarea상자에 보여준다. 
+	@ResponseBody
+	@RequestMapping("/imageUpload")
+	public void imageUploadGet(HttpServletRequest request, HttpServletResponse response, @RequestParam MultipartFile upload) throws Exception {
+		response.setCharacterEncoding("utf-8");
+		response.setContentType("text/html; charset=utf-8");
+		
+		String originalFilename = upload.getOriginalFilename();
+		
+		Date date = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmss");
+		originalFilename = sdf.format(date) + "_" + originalFilename;
+		
+		byte[] bytes = upload.getBytes();
+		
+		String uploadPath = request.getSession().getServletContext().getRealPath("/resources/data/shop/");
+		OutputStream outStr = new FileOutputStream(new File(uploadPath + originalFilename));
+		outStr.write(bytes);
+		
+		PrintWriter out = response.getWriter();
+		String fileUrl = request.getContextPath() + "/data/shop/" + originalFilename;
+		out.println("{\"originalFilename\":\""+originalFilename+"\",\"uploaded\":1,\"url\":\""+fileUrl+"\"}");
+		
+		out.flush();
+		outStr.close();
+	}
+	
+	// 상품 등록
+	@RequestMapping(value = "/productInput", method = RequestMethod.POST)
+	public String productInputPost(MultipartFile file, ProductVO vo) {
+		// 이미지파일 업로드시에 ckeditor폴더에서 product폴더로 복사작업처리....(dbShop폴더에서 'dbShop/product'로)
+		
+		ProductVO voCheck = adminService.getProductInfo(vo.getProductName());
+		
+		if(voCheck != null) {
+			return "redirect:/message/productInputNo";
+		}
+		
+		adminService.imgCheckProductInput(file, vo);
+		
+		return "redirect:/message/productInputOk";
+	}
+	
+	@RequestMapping(value = "/productList", method = RequestMethod.GET)
+	public String productListGet(Model model,
+			@RequestParam(name="part", defaultValue = "all", required = false) String part) {
+		ArrayList<ProductVO> mainNameVos = adminService.getMainName();
+		ArrayList<ProductVO> productVos = adminService.getProductList(part);
+		
+		model.addAttribute("mainNameVos", mainNameVos);
+		model.addAttribute("productVos", productVos);
+		
+		return "admin/shop/productList";
+	}
 
 }

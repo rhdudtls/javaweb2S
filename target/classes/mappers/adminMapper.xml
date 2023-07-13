@@ -38,6 +38,28 @@
 		select * from md_categorySub where categoryMainCode = #{mainCode};
 	</select>
 	
+	<select id="getProductMaxIdx" resultType="com.spring.javaweb2S.vo.ProductVO">
+  		select * from md_product order by idx desc limit 1;
+  	</select>
+	
+	<select id="getProductInfo" resultType="com.spring.javaweb2S.vo.ProductVO">
+		select * from md_product where productName = #{productName};
+	</select>
+	
+	<select id="getMainName" resultType="com.spring.javaweb2S.vo.ProductVO">
+		select categoryMainCode,categoryMainName from md_categoryMain group by categoryMainName order by categoryMainName;
+	</select>
+	
+	<select id="getProductList" resultType="com.spring.javaweb2S.vo.ProductVO">
+		<if test='part == "all"'>
+  			select * from md_product order by idx desc;
+	  	</if>
+	    <if test='part != "all"'>     <!-- A01003 -->
+	  		select * from md_product where categoryMainCode = #{part} order by idx desc;
+	  	</if>
+	</select>
+	
+	
 	<insert id="setCategoryMainInput" parameterType="java.util.Map">
 		insert into md_categoryMain values<foreach collection="list" item="item" separator=",">
             (#{item.code},#{item.name})
@@ -49,6 +71,11 @@
 			(#{item.mCode},#{item.sCode},#{item.sName})
         </foreach>
 	</insert>
+	
+	<insert id="setProductInput">
+    	insert into md_product values(#{vo.idx},#{vo.categoryMainCode},#{vo.categorySubCode},#{vo.productCode},#{vo.productName},#{vo.productPrice},#{vo.fSName},#{vo.content});
+  	</insert>
+	
 	
 	<delete id="setMemberDel">
 		delete from md_member where 

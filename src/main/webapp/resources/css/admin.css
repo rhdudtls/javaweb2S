@@ -9,18 +9,22 @@
 body {
 	font-family: 'SUITE-Regular' !important;
 }
-.top {
-	height:70px;
-	float: top;
-	background-color:#323647;
 
+.top {
+	position:fixed;
+	width: 100vw;
+	height:70px;
+	background-color:#323647;
+	top: 0px;
 }
 .left {
+	position:fixed;
 	width: 230px;
 	height:100vh;
 	float: left;
 	box-sizing: border-box;
 	background-color:#323647;
+	top: 70px;
 }
 .collapsible {
     background-color: #323647;
@@ -58,4 +62,8 @@ body {
 .content a:hover {
 	text-decoration: none;
 	color : #CCD5AE;
+}
+
+.container {
+	margin-top : 100px !important;
 }
