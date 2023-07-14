@@ -25,6 +25,7 @@ import com.spring.javaweb2S.service.AdminService;
 import com.spring.javaweb2S.vo.CategoryMainVO;
 import com.spring.javaweb2S.vo.CategorySubVO;
 import com.spring.javaweb2S.vo.MemberVO;
+import com.spring.javaweb2S.vo.OptionVO;
 import com.spring.javaweb2S.vo.ProductVO;
 
 @Controller
@@ -308,5 +309,100 @@ public class AdminController {
 		
 		return "admin/shop/productList";
 	}
-
+	
+	@RequestMapping(value = "/productOption", method = RequestMethod.GET)
+	public String productOptionGet(Model model) {
+		ArrayList<CategoryMainVO> mainVos = adminService.getCategoryMainList();
+		
+		model.addAttribute("mainVos", mainVos);
+		
+		return "admin/shop/productOption";
+	}
+	
+	@RequestMapping(value = "/productOption", method = RequestMethod.POST)
+	public String productOptionPost(Model model, OptionVO vo, String productName, String[] optionName, int[] optionPrice,
+			@RequestParam(name="flag", defaultValue = "", required=false) String flag) {
+		
+		int optionCnt = adminService.getOptionDupli(vo.getProductIdx(), optionName);
+		if(optionCnt != 0) {
+			model.addAttribute("temp", productName);
+			return "redirect:/message/optionInputNo";
+		}
+		
+		// 동일한 옵션이 없으면 vo에 set시킨후 옵션테이블에 등록시킨다.
+		for(int i=0; i<optionName.length; i++) {
+			vo.setProductIdx(vo.getProductIdx());
+			vo.setOptionName(optionName[i]);
+			vo.setOptionPrice(optionPrice[i]);
+			
+			adminService.setOptionInput(vo);
+			
+		}
+		if(!flag.equals("option2")) return "redirect:/message/optionInputOk";
+		else {
+			model.addAttribute("temp", productName);
+			return "redirect:/message/optionInputOk";
+		}
+		
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/categoryProductName", method = RequestMethod.POST)
+	public List<ProductVO> categoryProductNamePost(String categoryMainCode, String categorySubCode) {
+		return adminService.getCategoryProductName(categoryMainCode, categorySubCode);
+	}
+	
+	// 옵션 등록창에서, 상품을 선택하면 선택된 상품의 상세설명을 가져와서 뿌리기
+	@ResponseBody
+	@RequestMapping(value="/getProductInfor", method = RequestMethod.POST)
+	public ProductVO getProductInforPost(String productName) {
+		return adminService.getProductInfor(productName);
+	}
+	
+	// 옵션등록창에서 '옵셔보기'버튼클릭시에 해당 제품의 모든 옵션을 보여주기
+	@ResponseBody
+	@RequestMapping(value="/getOptionList", method = RequestMethod.POST)
+	public List<OptionVO> getOptionListPost(int productIdx) {
+		return adminService.getOptionList(productIdx);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/optionDelete", method = RequestMethod.POST)
+	public String optionDeletePost(int idx) {
+		adminService.setOptionDelete(idx);
+		return "";
+	}
+	
+	@RequestMapping(value = "/productContent", method = RequestMethod.GET)
+	public String productContentGet(Model model, int idx) {
+		
+		ProductVO productVO = adminService.getProductInfoIdx(idx);	   // 1건의 상품 정보를 불러온다.
+		List<OptionVO> optionVOS = adminService.getOptionList(idx); // 해당 상품의 모든 옵션 정보를 가져온다.
+		model.addAttribute("productVO", productVO);
+		model.addAttribute("optionVOS", optionVOS);
+		
+		return "admin/shop/productContent";
+	}
+	
+	@RequestMapping(value = "/productOption2", method = RequestMethod.GET)
+	public String productOption2Get(Model model, String productName) {
+		ProductVO vo = adminService.getProductInfor(productName);
+		List<OptionVO> optionVOS = adminService.getOptionList(vo.getIdx());
+		model.addAttribute("vo", vo);
+		model.addAttribute("optionVOS", optionVOS);
+		return "admin/shop/productOption2";
+	}
+	
+	@RequestMapping(value = "/productUpdate", method = RequestMethod.GET)
+	public String productUpdateGet(Model model, int idx) {
+		ProductVO vo = adminService.getProductInfoIdx(idx);
+		List<CategoryMainVO> vosMain = adminService.getCategoryMainList();
+		List<CategorySubVO> vosSub = adminService.getCategorySubName(vo.getCategoryMainCode());
+		
+		model.addAttribute("vo", vo);
+		model.addAttribute("vosMain", vosMain);
+		model.addAttribute("vosSub", vosSub);
+		return "admin/shop/productUpdate";
+	}
+	
 }

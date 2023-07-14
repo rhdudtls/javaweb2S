@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Param;
 import com.spring.javaweb2S.vo.CategoryMainVO;
 import com.spring.javaweb2S.vo.CategorySubVO;
 import com.spring.javaweb2S.vo.MemberVO;
+import com.spring.javaweb2S.vo.OptionVO;
 import com.spring.javaweb2S.vo.ProductVO;
 
 public interface AdminDAO {
@@ -58,5 +59,19 @@ public interface AdminDAO {
 	public ArrayList<ProductVO> getMainName();
 
 	public ArrayList<ProductVO> getProductList(@Param("part")String part);
+
+	public List<ProductVO> getCategoryProductName(@Param("categoryMainCode")String categoryMainCode, @Param("categorySubCode")String categorySubCode);
+
+	public ProductVO getProductInfor(@Param("productName")String productName);
+
+	public List<OptionVO> getOptionList(@Param("productIdx")int productIdx);
+
+	public void setOptionDelete(@Param("idx")int idx);
+
+	public int getOptionDupli(@Param("productIdx")int productIdx, @Param("optionName")String[] optionName);
+
+	public void setOptionInput(@Param("vo")OptionVO vo);
+
+	public ProductVO getProductInfoIdx(@Param("idx")int idx);
 
 }

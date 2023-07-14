@@ -46,6 +46,13 @@
 		select * from md_product where productName = #{productName};
 	</select>
 	
+	<select id="getProductInfoIdx" resultType="com.spring.javaweb2S.vo.ProductVO">
+		select product.*, (select categoryMainName from md_categoryMain where product.categoryMainCode = categoryMainCode) as categoryMainName, 
+		(select categorySubName from md_categorySub where product.categorySubCode = categorySubCode) as categorySubName
+  		from md_product product, md_categoryMain main, md_categorySub sub
+  		where idx = #{idx} limit 1;
+	</select>
+	
 	<select id="getMainName" resultType="com.spring.javaweb2S.vo.ProductVO">
 		select categoryMainCode,categoryMainName from md_categoryMain group by categoryMainName order by categoryMainName;
 	</select>
@@ -59,6 +66,26 @@
 	  	</if>
 	</select>
 	
+	<select id="getCategoryProductName" resultType="com.spring.javaweb2S.vo.ProductVO">
+	  	select * from md_product where categoryMainCode = #{categoryMainCode} <if test='categorySubCode != "no"'>and categorySubCode = #{categorySubCode}</if>
+  	</select>
+	
+	<select id="getProductInfor" resultType="com.spring.javaweb2S.vo.ProductVO">
+		select product.*, (select categoryMainName from md_categoryMain where product.categoryMainCode = categoryMainCode) as categoryMainName, 
+		(select categorySubName from md_categorySub where product.categorySubCode = categorySubCode) as categorySubName
+  		from md_product product, md_categoryMain main, md_categorySub sub
+  		where productName = #{productName} limit 1;
+	</select>
+	
+	<select id="getOptionList" resultType="com.spring.javaweb2S.vo.OptionVO">
+		select * from md_option where productIdx = #{productIdx} order by idx;
+	</select>
+	
+	<select id="getOptionDupli" resultType="int">
+		select count(*) from md_option where productIdx = #{productIdx} and optionName IN <foreach collection="optionName" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+	</select>
 	
 	<insert id="setCategoryMainInput" parameterType="java.util.Map">
 		insert into md_categoryMain values<foreach collection="list" item="item" separator=",">
@@ -76,6 +103,9 @@
     	insert into md_product values(#{vo.idx},#{vo.categoryMainCode},#{vo.categorySubCode},#{vo.productCode},#{vo.productName},#{vo.productPrice},#{vo.fSName},#{vo.content});
   	</insert>
 	
+	<insert id="setOptionInput">
+		insert into md_option values(default, #{vo.productIdx}, #{vo.optionName}, #{vo.optionPrice});
+	</insert>
 	
 	<delete id="setMemberDel">
 		delete from md_member where 
@@ -96,6 +126,10 @@
 			md_categorySub
 		</if>
 		where ${flag} = #{code};
+	</delete>
+	
+	<delete id="setOptionDelete">
+		delete from md_option where idx = #{idx};
 	</delete>
 	
 	<update id="setLevelUpdate">

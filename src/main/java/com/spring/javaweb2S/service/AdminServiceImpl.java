@@ -24,6 +24,7 @@ import com.spring.javaweb2S.dao.AdminDAO;
 import com.spring.javaweb2S.vo.CategoryMainVO;
 import com.spring.javaweb2S.vo.CategorySubVO;
 import com.spring.javaweb2S.vo.MemberVO;
+import com.spring.javaweb2S.vo.OptionVO;
 import com.spring.javaweb2S.vo.ProductVO;
 
 @Service
@@ -268,6 +269,41 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public ArrayList<ProductVO> getProductList(String part) {
 		return adminDAO.getProductList(part);
+	}
+
+	@Override
+	public List<ProductVO> getCategoryProductName(String categoryMainCode, String categorySubCode) {
+		return adminDAO.getCategoryProductName(categoryMainCode, categorySubCode);
+	}
+
+	@Override
+	public ProductVO getProductInfor(String productName) {
+		return adminDAO.getProductInfor(productName);
+	}
+
+	@Override
+	public List<OptionVO> getOptionList(int productIdx) {
+		return adminDAO.getOptionList(productIdx);
+	}
+
+	@Override
+	public void setOptionDelete(int idx) {
+		adminDAO.setOptionDelete(idx);
+	}
+
+	@Override
+	public int getOptionDupli(int productIdx, String[] optionName) {
+		return adminDAO.getOptionDupli(productIdx, optionName);
+	}
+
+	@Override
+	public void setOptionInput(OptionVO vo) {
+		adminDAO.setOptionInput(vo);
+	}
+
+	@Override
+	public ProductVO getProductInfoIdx(int idx) {
+		return adminDAO.getProductInfoIdx(idx);
 	}
 
 

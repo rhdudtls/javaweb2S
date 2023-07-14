@@ -40,6 +40,10 @@
 			background-color: white !important;
 			line-height: 5px !important;
 		}
+		
+		.productContent:hover {
+			color:black;
+		}
 	</style>
 	<script>
 		'use strict';
@@ -58,7 +62,7 @@
 	</script>
 </head>
 <body style="background-color:#EEF1FF">
-<div class="top">
+<div class="top" style="z-index: 1">
 	<jsp:include page="/WEB-INF/views/admin/adminHeader.jsp"/>
 </div>
 <div class="left">
@@ -79,7 +83,7 @@
 	    <c:forEach var="vo" items="${productVos}">
 			<div class="col-md-3">
 				<div style="text-align:center">
-					<a href="${ctp}/dbShop/dbShopContent?idx=${vo.idx}">
+					<a href="${ctp}/admin/productContent?idx=${vo.idx}" class="productContent">
 						<img src="${ctp}/data/shop/product/${vo.FSName}" width="230px" height="200px"/>
 						<div><font size="3">${vo.productName}</font></div>
 						<div><font size="3" color="orange"><fmt:formatNumber value="${vo.productPrice}" pattern="#,###"/>원</font></div>

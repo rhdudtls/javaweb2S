@@ -45,6 +45,7 @@
          <p><a href="${ctp}/admin/d2Management">소분류 관리</a><p>
          <p style="padding-left:5px;"><a href="${ctp}/admin/productInput">상품 등록</a><p>
          <p style="padding-left:5px;"><a href="${ctp}/admin/productList">상품 목록</a><p>
+         <p style="margin-left:-7px;"><a href="${ctp}/admin/productOption">상품 옵션 관리</a><p>
     </div>
     <button type="button" class="collapsible" onclick="collapse(this);">뭐할까</button>
     <div class="content">

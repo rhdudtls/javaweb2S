@@ -12,7 +12,8 @@ public class MessageController {
 
 	@RequestMapping(value = "/message/{msgFlag}", method = RequestMethod.GET)
 	public String messageGet(@PathVariable String msgFlag, Model model,
-			@RequestParam(name="mid", defaultValue = "", required = false)String mid) {
+			@RequestParam(name="mid", defaultValue = "", required = false)String mid,
+			@RequestParam(name="temp", defaultValue = "", required=false) String temp) {
 		if(msgFlag.equals("memberJoinOk")) {
 			model.addAttribute("msg", "회원가입완료!!!");
 			model.addAttribute("url", "/member/memberLogin");
@@ -48,6 +49,25 @@ public class MessageController {
 		else if(msgFlag.equals("productInputNo")) {
 			model.addAttribute("msg", "같은 이름의 상품이 존재합니다. 다시 입력하세요.");
 			model.addAttribute("url", "/admin/productInput");
+		}
+		else if(msgFlag.equals("optionInputNo")) {
+			model.addAttribute("msg", "같은 이름의 옵션이 존재합니다. 다시 입력하세요.");
+			if(temp == "") {
+				model.addAttribute("url", "/admin/productOption");
+			}
+			else {
+				model.addAttribute("url", "/admin/productOption2?productName="+temp);
+			}
+		}
+		else if(msgFlag.equals("optionInputOk")) {
+			if(temp == "") {
+				model.addAttribute("msg", "옵션이 등록되었습니다.");
+				model.addAttribute("url", "/admin/productOption");
+			}
+			else {
+				model.addAttribute("msg", "옵션이 등록되었습니다.");
+				model.addAttribute("url", "/admin/productOption2?productName="+temp);
+			}
 		}
 		
 		

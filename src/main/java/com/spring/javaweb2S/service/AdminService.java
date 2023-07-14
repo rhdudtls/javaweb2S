@@ -1,12 +1,14 @@
 package com.spring.javaweb2S.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.javaweb2S.vo.CategoryMainVO;
 import com.spring.javaweb2S.vo.CategorySubVO;
 import com.spring.javaweb2S.vo.MemberVO;
+import com.spring.javaweb2S.vo.OptionVO;
 import com.spring.javaweb2S.vo.ProductVO;
 
 public interface AdminService {
@@ -54,5 +56,20 @@ public interface AdminService {
 	public ArrayList<ProductVO> getMainName();
 
 	public ArrayList<ProductVO> getProductList(String part);
+
+	public List<ProductVO> getCategoryProductName(String categoryMainCode, String categorySubCode);
+
+	public ProductVO getProductInfor(String productName);
+
+	public List<OptionVO> getOptionList(int productIdx);
+
+	public void setOptionDelete(int idx);
+
+	public int getOptionDupli(int productIdx, String[] optionName);
+
+	public void setOptionInput(OptionVO vo);
+
+	public ProductVO getProductInfoIdx(int idx);
+
 
 }

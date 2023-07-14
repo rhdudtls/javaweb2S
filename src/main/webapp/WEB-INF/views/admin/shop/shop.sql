@@ -46,13 +46,10 @@ select count(*) as cnt from md_categorySub group by categoryMainCode;
 
 update md_categorySub set categoryMainCode = (select categoryMainCode from md_categoryMain where categoryMainName = '닭가슴살') where categorySubCode = '004';
 select categoryMainCode from md_categoryMain where categoryMainName = '닭가슴살';
-insert into md_categoryMain values('A', '닭가슴살');
-insert into md_categoryMain values('B', '간편밥류');
-insert into md_categoryMain values('C', '닭가슴살 간식');
-insert into md_categoryMain values('D', '소고기');
 
-insert into md_categorySub values('A', '001', '스팀 / 슬라이스');
-insert into md_categorySub values('A', '002', '스테이크 / 치킨');
-insert into md_categorySub values('B', '003', '한끼 도시락');
-insert into md_categorySub values('C', '004', '크리스피칩');
+select product.*, (select categoryMainName from md_categoryMain where product.categoryMainCode = categoryMainCode) as categoryMainName, sub.categorySubName from md_product product, md_categoryMain main, md_categorySub sub where productName = '고기' limit 1;
+
+select product.*, (select categoryMainName from md_categoryMain where product.categoryMainCode = categoryMainCode) as categoryMainName, (select categorySubName from md_categorySub where product.categorySubCode = categorySubCode) as categorySubName from md_product product, md_categoryMain main, md_categorySub sub where productName = '간식' limit 1;
+  		
+  		
 drop table categoryMain;

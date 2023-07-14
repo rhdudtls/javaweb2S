@@ -159,7 +159,7 @@
       </div>
       <div class="form-group">
         <label for="productName">상품명</label><br/>
-        <input type="text" name="productName" id="productName" class="form-control" placeholder="상품 모델명을 입력하세요" required />
+        <input type="text" name="productName" id="productName" class="form-control" placeholder="상품명을 입력하세요" required />
       </div>
       <div class="form-group">
         <label for="file">메인이미지</label>
