@@ -71,5 +71,11 @@ public interface AdminService {
 
 	public ProductVO getProductInfoIdx(int idx);
 
+	public void imgCheckProductUpdate(MultipartFile file, ProductVO vo, ProductVO originVO);
+
+	public void imgCheckProductDelete(int idx);
+
+	public void setProductCategoryUpdate(String mName, String originSCode, String sCode);
+
 
 }

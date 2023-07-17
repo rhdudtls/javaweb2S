@@ -132,6 +132,10 @@
 		delete from md_option where idx = #{idx};
 	</delete>
 	
+	<delete id="setProductDelete">
+		delete from md_product where idx = #{idx};
+	</delete>
+	
 	<update id="setLevelUpdate">
 		update md_member set level = #{level} where idx = #{idx};
 	</update>
@@ -147,5 +151,13 @@
 	<update id="setCategorySubUpdate">
 		update md_categorySub set categoryMainCode = (select categoryMainCode from md_categoryMain where categoryMainName = #{mName}),
 		categorySubCode = #{sCode}, categorySubName = #{sName} where categorySubCode = #{originSCode};
+	</update>
+	
+	<update id="setProductUpdate">
+		update md_product set categoryMainCode = #{vo.categoryMainCode}, categorySubCode = #{vo.categorySubCode}, productCode = #{vo.productCode}, productName = #{vo.productName}, productPrice = #{vo.productPrice}<if test="vo.fSName != null">, fSName = #{vo.fSName}</if> <if test='vo.content != ""'>, content = #{vo.content}</if> where idx = #{idx};
+	</update>
+	
+	<update id="setProductCategoryUpdate">
+		update md_product set categoryMainCode = (select categoryMainCode from md_categoryMain where categoryMainName = #{mName}), productCode = replace(productCode, SUBSTR(productCode,1,4),#{pCode}) where categorySubCode = #{originSCode};
 	</update>
 </mapper>

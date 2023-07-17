@@ -90,6 +90,9 @@
 			font-size: 13px;
 			line-height: 30px;
 		}
+		.col-3 {
+			margin-top:7.5px;
+		}
 	</style>
 </head>
 <body>
@@ -113,8 +116,8 @@
 					</div>
 				</c:if>
 				<c:if test="${level == 0}">
-					<div class="col-3 mt-2 pl-5">
-						<a href="${ctp}/admin/adminMain"><i class="fa-solid fa-gear top_icon text-center"><font size="1">관리자</font></i></a>
+					<div class="col-3 pl-5">
+						<a href="${ctp}/admin/adminMain"><i class="fa-solid fa-gear top_icon text-center" id="admin"><font size="1">관리자</font></i></a>
 					</div>
 				</c:if>
 				<div class="col-9 text-right">
@@ -139,7 +142,7 @@
 								<c:if test="${vom.cnt != 0 && count < 4}">
 									<c:set var="count" value="${count + 1}"/>
 									<div class="col pr-0" style="width:200px;">
-										<a href="#" class="division1">${vom.categoryMainName}<i class="fa-solid fa-chevron-right"></i></a>
+										<a href="${ctp}/shop/shopList" class="division1">${vom.categoryMainName}<i class="fa-solid fa-chevron-right"></i></a>
 										<div>
 											<c:forEach var="vos" items="${vosSub}" varStatus="sts">
 												<c:if test="${vom.categoryMainCode == vos.categoryMainCode}">

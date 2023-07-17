@@ -33,7 +33,6 @@
 			font-weight: bold;
 		}
 		.goPdInput {
-			margin-left:830px;
 			border-radius: 25px !important;
 			border: 1px solid #e6e6e6 !important;
 			height:30px !important;
@@ -44,9 +43,17 @@
 		.productContent:hover {
 			color:black;
 		}
+		.btn-orange {
+			background-color: #FFD6A5 !important;
+			margin-left:750px;
+		}
+		.btn-red {
+			background-color: #EA5455 !important;
+		}
 	</style>
 	<script>
 		'use strict';
+		let allCheckSw = 0;
 		
 		$(function(){
 			const url = document.location.href;
@@ -59,6 +66,53 @@
 				$("a[href*='"+link+"']").addClass('nowPart')
 			}
 		});
+		
+		function allCheck() {
+			allCheckSw++;
+			if(allCheckSw % 2 == 1) {
+				$("input[name=product]").prop("checked", true);
+				document.getElementById('allCk').value = "전체해제";
+			}
+			else {
+				$("input[name=product]").prop("checked", false);
+				document.getElementById('allCk').value = "전체선택";
+			}
+		}
+		
+		function productDelete() {
+			let chk_Val = [];
+			
+			$('input:checkbox[name=product]').each(function (index) {
+				if($(this).is(":checked")==true){
+					chk_Val.push($(this).val());
+			    }
+			});
+			
+			if(chk_Val.length == 0) {
+				alert("삭제할 상품을 선택하세요!")
+				return false;
+			}
+			
+			let ans = confirm("선택한 상품들을 삭제하시겠습니까?");
+			if(!ans) return false;
+			
+			$.ajax({
+				type:"post",
+				url : "${ctp}/admin/productDelete",
+				traditional: true,
+				data : {productArr : chk_Val},
+				success : function(res) {
+					if(res == 1) {
+						alert("상품이 삭제되었습니다!");
+						location.reload();
+					}
+					else alert("상품 삭제 실패~");
+				},
+				error : function() {
+					alert("전송오류!");
+				}
+			});
+		}
 	</script>
 </head>
 <body style="background-color:#EEF1FF">
@@ -71,6 +125,8 @@
 <div class="container">
 	<div class="mb-4 mt-5 ml-2" style="font-size:30px;">
 		<span><b>상품목록</b></span>
+		<span><input type="button" id="allCk" value="전체선택" onclick="allCheck()" class="btn btn-orange btn-sm"/></span>
+		<span><input type="button" value="상품삭제" onclick="productDelete()" class="btn btn-red btn-sm text-light"/></span>
 		<span><input type="button" value="상품등록 &gt;" onclick="location.href='${ctp}/admin/productInput';" class="btn goPdInput"/></span>
 	</div>
 	<span><a href="${ctp}/admin/productList?part=all" class="mainCateg ml-2">전체보기</a></span>
@@ -83,6 +139,7 @@
 	    <c:forEach var="vo" items="${productVos}">
 			<div class="col-md-3">
 				<div style="text-align:center">
+					<div><input type="checkbox" name="product" value="${vo.idx}"/></div>
 					<a href="${ctp}/admin/productContent?idx=${vo.idx}" class="productContent">
 						<img src="${ctp}/data/shop/product/${vo.FSName}" width="230px" height="200px"/>
 						<div><font size="3">${vo.productName}</font></div>

@@ -74,4 +74,10 @@ public interface AdminDAO {
 
 	public ProductVO getProductInfoIdx(@Param("idx")int idx);
 
+	public void setProductUpdate(@Param("vo")ProductVO vo, @Param("idx")int idx);
+
+	public void setProductDelete(@Param("idx")int idx);
+
+	public void setProductCategoryUpdate(@Param("mName")String mName, @Param("originSCode")String originSCode, @Param("pCode")String pCode);
+
 }

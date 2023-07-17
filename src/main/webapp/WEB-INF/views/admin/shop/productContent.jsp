@@ -17,10 +17,16 @@
 		'use strict';
 		
 		function optionDel() {
+			let idx = $("#optionList").val();
+			
+			if((typeof(idx) != 'string')) {
+				alert("삭제할 옵션을 선택하세요!");
+				return false;
+			}
+			
 			let ans = confirm("해당 옵션을 삭제하시겠습니까?");
 	    	if(!ans) return false;
 	    	
-			let idx = $("#optionList").val();
 			
 			$.ajax({
 				type : "post",

@@ -13,7 +13,8 @@ public class MessageController {
 	@RequestMapping(value = "/message/{msgFlag}", method = RequestMethod.GET)
 	public String messageGet(@PathVariable String msgFlag, Model model,
 			@RequestParam(name="mid", defaultValue = "", required = false)String mid,
-			@RequestParam(name="temp", defaultValue = "", required=false) String temp) {
+			@RequestParam(name="temp", defaultValue = "", required=false) String temp,
+			@RequestParam(name="idx", defaultValue = "0", required=false) int idx) {
 		if(msgFlag.equals("memberJoinOk")) {
 			model.addAttribute("msg", "회원가입완료!!!");
 			model.addAttribute("url", "/member/memberLogin");
@@ -68,6 +69,14 @@ public class MessageController {
 				model.addAttribute("msg", "옵션이 등록되었습니다.");
 				model.addAttribute("url", "/admin/productOption2?productName="+temp);
 			}
+		}
+		else if(msgFlag.equals("productUpdateNo")) {
+			model.addAttribute("msg", "이미 사용중인 상품명입니다.");
+			model.addAttribute("url", "/admin/productUpdate?idx="+idx);
+		}
+		else if(msgFlag.equals("productUpdateOk")) {
+			model.addAttribute("msg", "상품 정보가 수정되었습니다.");
+			model.addAttribute("url", "/admin/productContent?idx="+idx);
 		}
 		
 		

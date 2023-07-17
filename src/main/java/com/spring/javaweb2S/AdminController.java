@@ -216,6 +216,7 @@ public class AdminController {
 			return "1";
 		}
 		
+		adminService.setProductCategoryUpdate(mName, originSCode, sCode);
 		int res = adminService.setCategorySubUpdate(mName,sCode,sName,originSCode);
 		
 		if(res == 1) return "2";
@@ -405,4 +406,34 @@ public class AdminController {
 		return "admin/shop/productUpdate";
 	}
 	
+	@RequestMapping(value = "/productUpdate", method = RequestMethod.POST)
+	public String productUpdatePost(Model model, MultipartFile file, ProductVO vo,
+			@RequestParam(name="idx", defaultValue = "0", required=false) int idx) {
+		ProductVO originVO = adminService.getProductInfoIdx(idx);
+		
+		if(!originVO.getProductName().equals(vo.getProductName())) {
+			ProductVO voCheck = adminService.getProductInfo(vo.getProductName());
+			
+			if(voCheck != null) {
+				model.addAttribute("idx", idx);
+				return "redirect:/message/productUpdateNo";
+			}
+		}
+		
+		adminService.imgCheckProductUpdate(file, vo, originVO);
+		
+		model.addAttribute("idx", idx);
+		return "redirect:/message/productUpdateOk";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/productDelete", method = RequestMethod.POST)
+	public String productDeletePost(int[] productArr) {
+		for(int i = 0; i < productArr.length; i++) {
+			adminService.imgCheckProductDelete(productArr[i]);
+		}
+		
+		return "1";
+	}
+
 }

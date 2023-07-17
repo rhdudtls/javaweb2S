@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <c:set var="ctp" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html>
 <html>
@@ -22,6 +23,95 @@
 			outline:none;
 		}
 	</style>
+	<script>
+		'use strict';
+		function setThumbnail(event){
+			$("#originPhoto").css('display','none');
+			var reader = new FileReader();
+			
+			reader.onload = function(event){
+				var img = document.createElement("img");
+				img.setAttribute("src", event.target.result);
+				img.setAttribute("class", "col-lg-3");
+				let child = document.querySelector("div#picture")
+				child.innerHTML = "";
+				document.querySelector("div#picture").appendChild(img);
+			};
+			
+			reader.readAsDataURL(event.target.files[0]);
+		}
+		
+		function categoryMainChange(cnt) {
+			let mainCode = $("#categoryMainCode").val();
+			
+			$.ajax({
+				type : "post",
+				url : "${ctp}/admin/getCategorySubName",
+				data : {mainCode : mainCode},
+				success:function(data) {
+					let str = "";
+					if(data.length == 0) {
+						str += "<option value='no'>소분류가 존재하지 않습니다.</option>"
+						$("#categorySubCode").attr('disabled', true);
+					}
+					else {
+						$("#categorySubCode").attr('disabled', false);
+						str += "<option value=''>소분류를 선택하세요</option>";
+						for(var i=0; i<data.length; i++) {
+							str += "<option value='"+data[i].categorySubCode+"'>"+data[i].categorySubName+"</option>";
+						}
+					}
+					$("#categorySubCode").html(str);
+				},
+				error : function() {
+					alert("전송오류!");
+				}
+			});
+			
+		}
+		
+		function fCheck() {
+			let categoryMainCode = myform.categoryMainCode.value;
+	    	let categorySubCode = myform.categorySubCode.value;
+	    	let productName = myform.productName.value;
+			let productPrice = myform.productPrice.value;
+			let file = myform.file.value;
+			let content = myform.content.value;
+			let ext = file.substring(file.lastIndexOf(".")+1);
+			let uExt = ext.toUpperCase();
+			
+			if(categorySubCode == "") {
+				alert("상품 소분류를 선택하세요!");
+				return false;
+			}
+			else if(productName == "") {
+				alert("상품명을 입력하세요!");
+				return false;
+			}
+			else if(file != "" && uExt != "JPG" && uExt != "GIF" && uExt != "PNG" && uExt != "JPEG") {
+				alert("업로드 가능한 파일이 아닙니다.");
+				return false;
+			}
+			else if(productPrice == "") {
+				alert("상품가격을 입력하세요!");
+				return false;
+			}
+			else if(document.getElementById("file").value != "") {
+				var maxSize = 1024 * 1024 * 10;  // 10MByte까지 허용
+				var fileSize = document.getElementById("file").files[0].size;
+				if(fileSize > maxSize) {
+					alert("첨부파일의 크기는 10MB 이내로 등록하세요");
+					return false;
+				}
+				else {
+					myform.submit();
+				}
+			}
+			else {
+				myform.submit();
+			}
+		}
+	</script>
 </head>
 <body style="background-color:#EEF1FF">
 <div class="top" style="z-index: 1">
@@ -49,11 +139,18 @@
 	    <div id="categorySubDemo" class="col-6">
 	      <div class="form-group">
 	        <label for="categorySubCode">소분류</label><br/>
-	        <select id="categorySubCode" name="categorySubCode" class="pdselect">
-	          <c:forEach var="vos" items="${vosSub}">
-	          	<option value="${vos.categorySubCode}" <c:if test="${vo.categorySubCode == vos.categorySubCode}">selected</c:if>>${vos.categorySubName}</option>
-	          </c:forEach>
-	        </select>
+	          <c:if test="${fn:length(vosSub) == 0}">
+	       		<select id="categorySubCode" name="categorySubCode" class="pdselect" disabled>
+	          	  <option value="no">소분류가 존재하지 않습니다.</option>
+	        	</select>
+	          </c:if>
+	          <c:if test="${fn:length(vosSub) != 0}">
+	            <select id="categorySubCode" name="categorySubCode" class="pdselect">
+			      <c:forEach var="vos" items="${vosSub}">
+			        <option value="${vos.categorySubCode}" <c:if test="${vo.categorySubCode == vos.categorySubCode}">selected</c:if>>${vos.categorySubName}</option>
+			      </c:forEach>
+		        </select>
+	          </c:if>
 	      </div>
         </div>
       </div>
@@ -63,8 +160,9 @@
       </div>
       <div class="form-group">
         <label for="file">메인이미지</label>
-        <br/><img src="${ctp}/data/shop/product/${vo.FSName}" width="150px"/>
-        <input type="file" name="file" id="file" class="form-control-file" accept=".jpg,.gif,.png,.jpeg" required />
+        <div id="picture"></div>
+        <img src="${ctp}/data/shop/product/${vo.FSName}" width="150px" id="originPhoto"/>
+        <input type="file" name="file" id="file" class="form-control-file" accept=".jpg,.gif,.png,.jpeg" onchange="setThumbnail(event);"/>
         (업로드 가능파일:jpg, jpeg, gif, png)
       </div>
       <div class="form-group">
@@ -72,8 +170,8 @@
       	<input type="number" name="productPrice" id="productPrice" value="${vo.productPrice}" class="form-control" required />
       </div>
       <div class="form-group">
-      	<label for="content">상품상세설명(이미지 1장만 등록가능)</label>
-      	<textarea rows="5" name="content" id="CKEDITOR" class="form-control" required></textarea>
+      	<label for="content">상품상세설명(이미지만 등록가능)</label>
+      	<textarea rows="5" name="content" id="CKEDITOR" class="form-control"></textarea>
       </div>
       <script>
 		    CKEDITOR.replace("content",{
@@ -83,9 +181,11 @@
 		    });
 	  </script>
       <div class="text-center">
-		  <input type="reset" value="초기화" class="btn btn-secondary"/> &nbsp;
-		  <input type="button" value="상품등록" onclick="fCheck()" class="btn btn-primary mr-2"/> &nbsp;
+		  <input type="button" value="상품수정" onclick="fCheck()" class="btn btn-primary mr-1"/> &nbsp;
+		  <input type="reset" value="초기화" class="btn btn-warning mr-1"/> &nbsp;
+		  <input type="button" value="돌아가기" onclick="location.href='${ctp}/admin/productContent?idx=${vo.idx}';" class="btn btn-secondary"/> &nbsp;
 	  </div>
+	  <input type="hidden" name="idx" value="${vo.idx}"/>
     </form>
   </div>
 </div>

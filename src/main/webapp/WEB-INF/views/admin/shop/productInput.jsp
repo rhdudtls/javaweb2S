@@ -34,7 +34,7 @@
 	<script>
 		'use strict';
 		
-		function categoryMainChange(cnt) {
+		function categoryMainChange() {
 			let mainCode = $("#categoryMainCode").val();
 			
 			if(mainCode.trim() == "") {
