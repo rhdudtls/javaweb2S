@@ -88,7 +88,6 @@
 		.division2 {
 			padding-left: 30px;
 			font-size: 13px;
-			line-height: 30px;
 		}
 		.col-3 {
 			margin-top:7.5px;
@@ -142,11 +141,11 @@
 								<c:if test="${vom.cnt != 0 && count < 4}">
 									<c:set var="count" value="${count + 1}"/>
 									<div class="col pr-0" style="width:200px;">
-										<a href="${ctp}/shop/shopList" class="division1">${vom.categoryMainName}<i class="fa-solid fa-chevron-right"></i></a>
+										<a href="${ctp}/shop/shopList?category=${vom.categoryMainCode}&part=all" class="division1">${vom.categoryMainName}<i class="fa-solid fa-chevron-right"></i></a>
 										<div>
 											<c:forEach var="vos" items="${vosSub}" varStatus="sts">
 												<c:if test="${vom.categoryMainCode == vos.categoryMainCode}">
-														<div><a href="#" class="division2">${vos.categorySubName}</a></div>
+														<div style="line-height: 30px;"><a href="${ctp}/shop/shopList?category=${vom.categoryMainCode}&part=${vos.categorySubCode}" class="division2">${vos.categorySubName}</a></div>
 												</c:if>
 											</c:forEach>
 										</div>
@@ -158,7 +157,7 @@
 								<div class="col pr-0" style="width:200px;">
 									<c:forEach var="vom" items="${vosMain}" varStatus="stm">
 										<c:if test="${size <= fn:length(vosMain)-3 && size > 5}">
-											<div style="height:60px;"><a href="#" class="division1 lh-sm ml-2">${vom.categoryMainName}<i class="fa-solid fa-chevron-right"></i></a></div>
+											<div style="height:60px;"><a href="${ctp}/shop/shopList?category=${vom.categoryMainCode}&part=all" class="division1 lh-sm ml-2">${vom.categoryMainName}<i class="fa-solid fa-chevron-right"></i></a></div>
 											<c:set var="size" value="${size - 1}"/>
 										</c:if>
 										<c:if test="${size > fn:length(vosMain)-3}">
@@ -170,7 +169,7 @@
 								<div class="col pl-0 pr-0">
 									<c:forEach var="vom" items="${vosMain}" varStatus="stm">
 										<c:if test="${size <= 5}">
-											<div style="height:60px;"><a href="#" class="division1 lh-sm ml-2">${vom.categoryMainName}<i class="fa-solid fa-chevron-right"></i></a></div>
+											<div style="height:60px;"><a href="${ctp}/shop/shopList?category=${vom.categoryMainCode}&part=all" class="division1 lh-sm ml-2">${vom.categoryMainName}<i class="fa-solid fa-chevron-right"></i></a></div>
 										</c:if>
 										<c:if test="${size > 5}">
 											<c:set var="size" value="${size - 1}"/>
@@ -186,7 +185,7 @@
 											<c:set var="size" value="${size - 1}"/>
 										</c:if>
 										<c:if test="${size == fn:length(vosMain)-4}">
-											<a href="#" class="division1">${vom.categoryMainName}<i class="fa-solid fa-chevron-right"></i></a>
+											<a href="${ctp}/shop/shopList?category=${vom.categoryMainCode}&part=all" class="division1">${vom.categoryMainName}<i class="fa-solid fa-chevron-right"></i></a>
 											<c:set var="size" value="${size - 1}"/>
 										</c:if>
 									</c:forEach>
@@ -195,7 +194,7 @@
 								<div class="col pl-0 pr-0">
 									<c:forEach var="vom" items="${vosMain}" varStatus="stm">
 										<c:if test="${size <= fn:length(vosMain)-4}">
-											<div style="height:60px;"><a href="#" class="division1 lh-sm ml-2">${vom.categoryMainName}<i class="fa-solid fa-chevron-right"></i></a></div>
+											<div style="height:60px;"><a href="${ctp}/shop/shopList?category=${vom.categoryMainCode}&part=all" class="division1 lh-sm ml-2">${vom.categoryMainName}<i class="fa-solid fa-chevron-right"></i></a></div>
 										</c:if>
 										<c:if test="${size > fn:length(vosMain)-4}">
 											<c:set var="size" value="${size - 1}"/>

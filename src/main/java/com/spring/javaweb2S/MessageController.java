@@ -53,7 +53,7 @@ public class MessageController {
 		}
 		else if(msgFlag.equals("optionInputNo")) {
 			model.addAttribute("msg", "같은 이름의 옵션이 존재합니다. 다시 입력하세요.");
-			if(temp == "") {
+			if(temp.equals("")) {
 				model.addAttribute("url", "/admin/productOption");
 			}
 			else {
@@ -61,12 +61,11 @@ public class MessageController {
 			}
 		}
 		else if(msgFlag.equals("optionInputOk")) {
-			if(temp == "") {
-				model.addAttribute("msg", "옵션이 등록되었습니다.");
+			model.addAttribute("msg", "옵션이 등록되었습니다.");
+			if(temp.equals("")) {
 				model.addAttribute("url", "/admin/productOption");
 			}
 			else {
-				model.addAttribute("msg", "옵션이 등록되었습니다.");
 				model.addAttribute("url", "/admin/productOption2?productName="+temp);
 			}
 		}

@@ -326,7 +326,9 @@ public class AdminController {
 		
 		int optionCnt = adminService.getOptionDupli(vo.getProductIdx(), optionName);
 		if(optionCnt != 0) {
-			model.addAttribute("temp", productName);
+			if(flag.equals("option2")) {
+				model.addAttribute("temp", productName);
+			}
 			return "redirect:/message/optionInputNo";
 		}
 		

@@ -77,5 +77,4 @@ public interface AdminService {
 
 	public void setProductCategoryUpdate(String mName, String originSCode, String sCode);
 
-
 }
