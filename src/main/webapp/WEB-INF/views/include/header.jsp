@@ -121,7 +121,7 @@
 				</c:if>
 				<div class="col-9 text-right">
 					<i class="fa-regular fa-user top_icon"></i>
-					<i class="fa-solid fa-cart-shopping top_icon" style="padding-right:15px;"></i>
+					<a href="${ctp}/shop/shopCart"><i class="fa-solid fa-cart-shopping top_icon" style="padding-right:15px;"></i></a>
 					<i class="fa-regular fa-calendar-check top_icon"></i>
 				</div>
 			</div>

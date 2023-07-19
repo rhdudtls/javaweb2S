@@ -13,4 +13,26 @@
 	<select id="getCategoryMainInfo" resultType="com.spring.javaweb2S.vo.CategoryMainVO">
 		select *, (select count(*) from md_categorySub as s where m.categoryMainCode = s.categoryMainCode) as cnt from md_categoryMain as m where categoryMainCode = #{category};
 	</select>
+	
+	<select id="getCartProductOptionSearch" resultType="com.spring.javaweb2S.vo.CartVO">
+		select * from md_cart where mid = #{mid} and productIdx = #{productIdx} and optionIdx = #{opIdx};
+	</select>
+	
+	<select id="getCartList" resultType="com.spring.javaweb2S.vo.CartVO">
+		select * from md_cart where mid = #{mid};
+	</select>
+	
+	<update id="setCartProductOptionUpdate">
+		update md_cart set optionNum = optionNum + #{opNum}, totalPrice = #{totPrice} where idx = #{idx};
+	</update>
+	
+	<insert id="setCartProductOptionInput">
+		insert into md_cart values(default, default, #{vo.mid}, #{vo.productIdx}, #{vo.productName}, #{vo.productPrice}, #{vo.thumbImg}, #{opIdx}, #{opName}, #{opPrc}, #{opNum}, #{vo.totalPrice});
+	</insert>
+	
+	<delete id="setCartProductOptionDelete">
+		delete from md_cart where idx IN <foreach collection="idxArr" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+	</delete>
 </mapper>

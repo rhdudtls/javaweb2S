@@ -3,15 +3,20 @@ package com.spring.javaweb2S;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.spring.javaweb2S.service.AdminService;
 import com.spring.javaweb2S.service.ShopService;
+import com.spring.javaweb2S.vo.CartVO;
 import com.spring.javaweb2S.vo.CategoryMainVO;
 import com.spring.javaweb2S.vo.CategorySubVO;
 import com.spring.javaweb2S.vo.OptionVO;
@@ -67,5 +72,59 @@ public class ShopController {
 		model.addAttribute("productVO", productVO);
 		model.addAttribute("optionVOS", optionVOS);
 		return "shop/shopDetail";
+	}
+	
+	@RequestMapping(value = "/shopCart", method = RequestMethod.GET)
+	public String shopCartGet(Model model, HttpSession session) {
+		String mid = (String)session.getAttribute("sMid");
+		List<CartVO> vosCart = shopService.getCartList(mid);
+		model.addAttribute("vosCart", vosCart);
+		
+		//헤더 메뉴
+		ArrayList<CategoryMainVO> vosMain = adminService.getCategoryMainList();
+		ArrayList<CategorySubVO> vosSub = adminService.getCategorySubList();
+		model.addAttribute("vosMain", vosMain);
+		model.addAttribute("vosSub", vosSub);
+		
+		return "shop/shopCart";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/cartDelete", method = RequestMethod.POST)
+	public String cartDeletePost(int[] idxArr) {
+		
+		shopService.setCartProductOptionDelete(idxArr);
+		
+		return "";
+	}
+	
+	@RequestMapping(value = "/shopDetail", method = RequestMethod.POST)
+	public String shopDetailPost(CartVO vo, HttpSession session, String flag, int[] optionIdx, int[] optionNum, String[] optionName, int[] optionPrice) {
+		int totPrice;
+		String mid = (String)session.getAttribute("sMid");
+		
+		for(int i=0; i < optionIdx.length; i++) {
+			int opIdx = optionIdx[i];
+			int opNum = optionNum[i];
+			int opPrc = optionPrice[i];
+			String opName = optionName[i];
+			CartVO resVo = shopService.getCartProductOptionSearch(vo.getProductIdx(), opIdx, mid);
+			if(resVo != null) {		// 기존에 구매한적이 있었다면 '현재 구매한 내역'과 '기존 장바구니의 수량'을 합쳐서 'Update'시켜줘야한다.
+				totPrice = (resVo.getProductPrice() + resVo.getOptionPrice()) * ( resVo.getOptionNum()+ opNum);
+				shopService.setCartProductOptionUpdate(resVo.getIdx(), opNum, totPrice);
+			}
+			else {
+				vo.setTotalPrice((vo.getProductPrice() + opPrc) * opNum);
+				shopService.setCartProductOptionInput(vo, opIdx, opNum, opName, opPrc);
+			}
+		}
+		
+		if(flag.equals("goShop")) {
+			return "redirect:/shop/shopDetail?idx="+vo.getProductIdx();
+		}
+		else if(flag.equals("goCart")) {
+			return "redirect:/shop/shopCart";
+		}
+		return "shop/shopBasket";
 	}
 }

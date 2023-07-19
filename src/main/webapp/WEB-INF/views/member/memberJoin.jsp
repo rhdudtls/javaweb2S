@@ -540,10 +540,10 @@
 				<input type="text" placeholder="이메일을 입력하세요." id="email1" name="email1" required class="joininput"/> @
 				<input type="text" placeholder="이메일주소를 선택하세요." id="email2" name="email2" required class="joinselect"/>
 				<select name="emailChoice" id ="emailChoice" class="joinselect mr-2" onchange="emailInput()">
+					<option value="gmail.com">gmail.com</option>
 					<option value="naver.com">naver.com</option>
 					<option value="hanmail.net">hanmail.net</option>
-					<option value="hotmail.com">hotmail.com</option>
-					<option value="gmail.com">gmail.com</option>
+					<option value="hotmail.com">daum.net</option>
 					<option value="nate.com">nate.com</option>
 					<option value="yahoo.com">yahoo.com</option>
 					<option value="">직접입력</option>
