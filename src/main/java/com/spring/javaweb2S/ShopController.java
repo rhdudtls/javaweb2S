@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.spring.javaweb2S.service.AdminService;
+import com.spring.javaweb2S.service.MemberService;
 import com.spring.javaweb2S.service.ShopService;
 import com.spring.javaweb2S.vo.CartVO;
 import com.spring.javaweb2S.vo.CategoryMainVO;
 import com.spring.javaweb2S.vo.CategorySubVO;
+import com.spring.javaweb2S.vo.MemberVO;
 import com.spring.javaweb2S.vo.OptionVO;
 import com.spring.javaweb2S.vo.ProductVO;
 
@@ -31,6 +33,9 @@ public class ShopController {
 	
 	@Autowired
 	AdminService adminService;
+	
+	@Autowired
+	MemberService memberService;
 	
 	@RequestMapping(value = "/shopList", method = RequestMethod.GET)
 	public String shopListGet(Model model,
@@ -91,9 +96,22 @@ public class ShopController {
 	
 	@ResponseBody
 	@RequestMapping(value = "/cartDelete", method = RequestMethod.POST)
-	public String cartDeletePost(int[] idxArr) {
+	public String cartDeletePost(HttpSession session, int[] idxArr, 
+			@RequestParam(name="flag", defaultValue = "", required = false)String flag) {
+		String mid = (String)session.getAttribute("sMid");
+
+		shopService.setCartProductOptionDelete(idxArr, flag, mid);
 		
-		shopService.setCartProductOptionDelete(idxArr);
+		return "";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/cartNumChange", method = RequestMethod.POST)
+	public String cartNumChangePost(
+			@RequestParam(name="idx", defaultValue = "", required = false)int idx,
+			@RequestParam(name="flag", defaultValue = "", required = false)int flag) {
+		
+		shopService.setCartProductOptionNumChange(idx, flag);
 		
 		return "";
 	}
@@ -125,6 +143,25 @@ public class ShopController {
 		else if(flag.equals("goCart")) {
 			return "redirect:/shop/shopCart";
 		}
-		return "shop/shopBasket";
+		return "shop/shopBasket"; //여기 수정해라
 	}
+	
+	@RequestMapping(value = "/shopOrder", method = RequestMethod.GET)
+	public String shopOrderGet(HttpSession session, Model model) {
+		String mid = (String)session.getAttribute("sMid");
+		MemberVO mvo = memberService.getMemberInfo(mid);
+		model.addAttribute("mvo", mvo);
+		
+		List<CartVO> vosCart = shopService.getCartList(mid);
+		model.addAttribute("vosCart", vosCart);
+		
+		//헤더 메뉴
+		ArrayList<CategoryMainVO> vosMain = adminService.getCategoryMainList();
+		ArrayList<CategorySubVO> vosSub = adminService.getCategorySubList();
+		model.addAttribute("vosMain", vosMain);
+		model.addAttribute("vosSub", vosSub);
+				
+		return "shop/shopOrder";
+	}
+	
 }

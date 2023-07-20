@@ -49,9 +49,14 @@ public class ShopServiceImpl implements ShopService {
 	}
 
 	@Override
-	public void setCartProductOptionDelete(int[] idxArr) {
-		shopDAO.setCartProductOptionDelete(idxArr);
+	public void setCartProductOptionDelete(int[] idxArr, String flag, String mid) {
+		shopDAO.setCartProductOptionDelete(idxArr, flag, mid);
 		
+	}
+
+	@Override
+	public void setCartProductOptionNumChange(int idx, int flag) {
+		shopDAO.setCartProductOptionNumChange(idx, flag);
 	}
 
 

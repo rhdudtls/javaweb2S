@@ -23,7 +23,9 @@ public interface ShopDAO {
 
 	public List<CartVO> getCartList(@Param("mid")String mid);
 
-	public void setCartProductOptionDelete(@Param("idxArr")int[] idxArr);
+	public void setCartProductOptionDelete(@Param("idxArr")int[] idxArr, @Param("flag")String flag, @Param("mid")String mid);
+
+	public void setCartProductOptionNumChange(@Param("idx")int idx, @Param("flag")int flag);
 
 
 }

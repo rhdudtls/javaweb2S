@@ -5,6 +5,9 @@
 		select * from md_member where ${flag} = #{data};
 	</select>
 	
+	<select id="getMemberInfo" resultType="com.spring.javaweb2S.vo.MemberVO">
+		select * from md_member where mid = #{mid};
+	</select>
 	<insert id="setMemberJoin">
 		insert into md_member values(default, #{vo.mid}, #{vo.pwd}, #{vo.name}, #{vo.nickName}, #{vo.tel}, #{vo.email}, #{vo.gender}, #{vo.birthday}, #{vo.address}, default, default, default, default, #{vo.snsCheck});
 	</insert>

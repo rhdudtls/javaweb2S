@@ -32,4 +32,9 @@ public class MemberServiceImpl implements MemberService {
 		memberDAO.setMemberAutoDelete();
 	}
 
+	@Override
+	public MemberVO getMemberInfo(String mid) {
+		return memberDAO.getMemberInfo(mid);
+	}
+
 }

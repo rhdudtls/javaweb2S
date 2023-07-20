@@ -14,5 +14,7 @@ public interface MemberDAO {
 
 	public void setMemberAutoDelete();
 
+	public MemberVO getMemberInfo(@Param("mid")String mid);
+
 
 }

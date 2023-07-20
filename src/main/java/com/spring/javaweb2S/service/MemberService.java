@@ -12,5 +12,7 @@ public interface MemberService {
 
 	public void setMemberAutoDelete();
 
+	public MemberVO getMemberInfo(String mid);
+
 
 }

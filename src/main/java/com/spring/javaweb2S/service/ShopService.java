@@ -21,6 +21,8 @@ public interface ShopService {
 
 	public List<CartVO> getCartList(String mid);
 
-	public void setCartProductOptionDelete(int[] idxArr);
+	public void setCartProductOptionDelete(int[] idxArr, String flag, String mid);
+
+	public void setCartProductOptionNumChange(int idx, int flag);
 
 }
