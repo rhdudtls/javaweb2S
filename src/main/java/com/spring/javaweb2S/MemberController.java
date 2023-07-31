@@ -1,5 +1,8 @@
 package com.spring.javaweb2S;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 import java.util.UUID;
 
 import javax.mail.MessagingException;
@@ -14,14 +17,26 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.spring.javaweb2S.pagination.PageProcess;
+import com.spring.javaweb2S.pagination.PageVO;
+import com.spring.javaweb2S.service.AdminService;
 import com.spring.javaweb2S.service.MemberService;
+import com.spring.javaweb2S.service.ShopService;
+import com.spring.javaweb2S.vo.CartVO;
+import com.spring.javaweb2S.vo.CategoryMainVO;
+import com.spring.javaweb2S.vo.CategorySubVO;
+import com.spring.javaweb2S.vo.CouponVO;
+import com.spring.javaweb2S.vo.LikeVO;
 import com.spring.javaweb2S.vo.MemberVO;
+import com.spring.javaweb2S.vo.OrderVO;
+import com.spring.javaweb2S.vo.ProductVO;
 
 @Controller
 @RequestMapping("/member")
@@ -31,10 +46,19 @@ public class MemberController {
 	MemberService memberService;
 	
 	@Autowired
+	PageProcess pageProcess;
+	
+	@Autowired
 	BCryptPasswordEncoder passwordEncoder;
 	
 	@Autowired
 	JavaMailSender mailSender;
+	
+	@Autowired
+	AdminService adminService;
+	
+	@Autowired
+	ShopService shopService;
 	
 	@RequestMapping(value = "/memberLogin", method = RequestMethod.GET)
 	public String memberLoginGet(HttpServletRequest request) {
@@ -200,4 +224,166 @@ public class MemberController {
 		
 		return "redirect:/";
 	}
+	
+	@RequestMapping(value = "/memberMyOrder", method = RequestMethod.GET)
+	public String memberMyPageGet(Model model, HttpSession session,
+			@RequestParam(name="startDate", defaultValue = "", required = false)String startDate,
+			@RequestParam(name="lastDate", defaultValue = "", required = false)String lastDate,
+			@RequestParam(name="part", defaultValue = "all", required = false)String part) {
+		
+		String mid = (String)session.getAttribute("sMid");
+		String strLevel = "";
+		
+		ArrayList<CouponVO> couponVOS = memberService.getCouPonListMine(mid);
+		List<CartVO> cartVOS = shopService.getCartList(mid);
+		ArrayList<OrderVO> orderVOS = memberService.getMyOrderList(mid, startDate, lastDate, part);
+		MemberVO memVO = memberService.getMemberInfo(mid);
+		switch (memVO.getLevel()) {
+			case 0:
+				strLevel = "관리자";
+				break;
+			case 1:
+				strLevel = "GOLD";
+				break;
+			case 2:
+				strLevel = "SILVER";
+				break;
+			case 3:
+				strLevel = "BRONZE";
+				break;
+
+		}
+		model.addAttribute("memVO", memVO);
+		model.addAttribute("strLevel", strLevel);
+		model.addAttribute("couponVOS", couponVOS);
+		model.addAttribute("cartVOS", cartVOS);
+		model.addAttribute("orderVOS", orderVOS);
+		model.addAttribute("startDate", startDate);
+		model.addAttribute("lastDate", lastDate);
+		model.addAttribute("part", part);
+		
+		ArrayList<CategoryMainVO> vosMain = adminService.getCategoryMainList();
+		ArrayList<CategorySubVO> vosSub = adminService.getCategorySubList();
+		model.addAttribute("vosMain", vosMain);
+		model.addAttribute("vosSub", vosSub);
+		
+		return "member/memberMyOrder";
+	}
+	
+	@RequestMapping(value = "/memberMyCoupon", method = RequestMethod.GET)
+	public String memberMyCouponGet(Model model, HttpSession session) {
+		String mid = (String)session.getAttribute("sMid");
+		ArrayList<CouponVO> couponVOS = memberService.getCouPonListMine(mid);
+		model.addAttribute("couponVOS", couponVOS);
+		
+		ArrayList<CategoryMainVO> vosMain = adminService.getCategoryMainList();
+		ArrayList<CategorySubVO> vosSub = adminService.getCategorySubList();
+		model.addAttribute("vosMain", vosMain);
+		model.addAttribute("vosSub", vosSub);
+		
+		return "member/memberMyCoupon";
+	}
+	
+	@RequestMapping(value = "/memberMyLike", method = RequestMethod.GET)
+	public String memberMyLikeGet(Model model, HttpSession session,
+			@RequestParam(name="pag", defaultValue = "1", required=false) int pag,
+			@RequestParam(name="pageSize", defaultValue = "5", required=false) int pageSize) {
+		String mid = (String)session.getAttribute("sMid");
+		PageVO pageVO = pageProcess.totRecCnt(mid, pag, pageSize, "myLike", "", "");
+		ArrayList<ProductVO> likeVOS = memberService.getMyLikeList(pageVO.getStartIndexNo(), pageSize, mid);
+		model.addAttribute("likeVOS", likeVOS);
+		model.addAttribute("pageVO", pageVO);
+		
+		
+		ArrayList<CategoryMainVO> vosMain = adminService.getCategoryMainList();
+		ArrayList<CategorySubVO> vosSub = adminService.getCategorySubList();
+		model.addAttribute("vosMain", vosMain);
+		model.addAttribute("vosSub", vosSub);
+		
+		return "member/memberMyLike";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/CouponGet", method = RequestMethod.POST)
+	public String CouponGetPost(HttpSession session, String number) {
+		String mid = (String)session.getAttribute("sMid");
+		
+		CouponVO vo = memberService.getCouponInfo(number);
+		if(vo == null) return "0";
+		
+		CouponVO vo2 = memberService.getCouponDupli(mid, number);
+		if(vo2 != null) return "2";
+		
+		int res = memberService.setCouponGet(mid, number);
+		
+		if(res == 1) return "1";
+		else return "0";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/memberLike", method = RequestMethod.POST)
+	public String memberLiketPost(HttpSession session, int idx) {
+		String mid = (String)session.getAttribute("sMid");
+		
+		LikeVO likeVO = memberService.getMyLike(mid, idx);
+		if(likeVO == null) {
+			int res = memberService.setMemberLikeInput(mid, idx);
+			if(res == 1) return "1";
+			else return "0";
+		}
+		else {
+			int res2 = memberService.setMemberLikeDelete(mid, idx);
+			if(res2 == 1) return "2";
+			else return "0";
+		}
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/myLikeDelete", method = RequestMethod.POST)
+	public String myLikeDeletePost(HttpSession session, int idx) {
+		String mid = (String)session.getAttribute("sMid");
+		
+		int res = memberService.setMemberLikeDelete(mid, idx);
+		
+		if(res == 1) return "1";
+		else return "0";
+	}
+	
+	@RequestMapping(value = "/memberAttend", method = RequestMethod.GET)
+	public String memberAttendGet(HttpSession session, Model model,
+			@RequestParam(name="yy", defaultValue = "0", required=false) int yy,
+			@RequestParam(name="mm", defaultValue = "0", required=false) int mm) {
+		String mid = (String)session.getAttribute("sMid");
+		// 오늘 날짜처리(저장)
+		Calendar calToday = Calendar.getInstance();
+		int toYear = calToday.get(Calendar.YEAR);
+		int toMonth = calToday.get(Calendar.MONTH);
+		int toDay = calToday.get(Calendar.DATE);
+		
+		// 화면에 보여줄 해당 '년/월'을 셋팅
+		Calendar calView = Calendar.getInstance();
+		if(yy == 0) yy = calView.get(Calendar.YEAR);
+		if(mm == 0) mm = calView.get(Calendar.MONTH);
+		
+		if(mm < 0) {
+			yy--;
+			mm = 11;
+		}
+		else if(mm > 11) {
+			yy++;
+			mm = 0;
+		}
+		
+		calView.set(yy, mm, 1);
+		int startWeek = calView.get(Calendar.DAY_OF_WEEK);
+		int lastDay = calView.getActualMaximum(Calendar.DAY_OF_MONTH);
+
+		model.addAttribute("yy", yy);
+		model.addAttribute("mm", mm);
+		model.addAttribute("startWeek", startWeek);
+		model.addAttribute("lastDay", lastDay);
+		
+		return "member/memberAttend";
+	}
+	
 }

@@ -22,6 +22,24 @@
 		select * from md_cart where mid = #{mid};
 	</select>
 	
+	<select id="getOrderMaxIdx" resultType="com.spring.javaweb2S.vo.OrderVO">
+		select max(idx) as maxIdx from md_order;
+	</select>
+	
+	<select id="getCartProductInfoIdx" resultType="com.spring.javaweb2S.vo.CartVO">
+		select * from md_cart where idx = #{cartIdx};
+	</select>
+	
+	<select id="getProductSearch" resultType="com.spring.javaweb2S.vo.ProductVO">
+		select * from md_product where  
+		<if test='searchCategory == "productName"'>productName</if>
+		<if test='searchCategory != "productName"'>productCode</if> like concat('%', #{keyword}, '%');
+	</select>
+	
+	<select id="getNewProductList" resultType="com.spring.javaweb2S.vo.ProductVO">
+		select * from md_product order by rgDate desc limit 4;
+	</select>
+	
 	<update id="setCartProductOptionUpdate">
 		update md_cart set optionNum = optionNum + #{opNum}, totalPrice = #{totPrice} where idx = #{idx};
 	</update>
@@ -36,6 +54,14 @@
 		insert into md_cart values(default, default, #{vo.mid}, #{vo.productIdx}, #{vo.productName}, #{vo.productPrice}, #{vo.thumbImg}, #{opIdx}, #{opName}, #{opPrc}, #{opNum}, #{vo.totalPrice});
 	</insert>
 	
+	<insert id="setOrderInput">
+		insert into md_order values(default, #{vo.orderIdx},#{vo.mid},#{vo.productIdx},default,#{vo.productName},#{vo.productPrice},#{vo.thumbImg},#{vo.optionName},#{vo.optionPrice},#{vo.optionNum},#{vo.totalPrice});
+	</insert>
+	
+	<insert id="setBaesongInput">
+		insert into md_baesong values(default, #{baesongVO.oIdx}, #{baesongVO.orderIdx}, #{baesongVO.orderTotalPrice}, #{baesongVO.mid}, #{baesongVO.name}, #{baesongVO.address}, #{baesongVO.tel}, #{baesongVO.message}, #{baesongVO.payment}, #{baesongVO.payMethod}, default);
+	</insert>
+	
 	<delete id="setCartProductOptionDelete">
 		<if test='flag == ""'>
 			delete from md_cart where idx IN <foreach collection="idxArr" item="item" index="index" open="(" close=")" separator=",">
@@ -45,5 +71,9 @@
 		<if test='flag == "all"'>
 			delete from md_cart where mid = #{mid};
         </if>
+	</delete>
+	
+	<delete id="setCartDeleteAfterPay">
+		delete from md_cart where idx = #{cartIdx};
 	</delete>
 </mapper>

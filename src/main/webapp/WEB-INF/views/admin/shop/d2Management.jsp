@@ -238,7 +238,7 @@
 	<jsp:include page="/WEB-INF/views/admin/adminMenu.jsp"/>
 </div>
 <p><br/></p>
-<div class="container">
+<div class="container" style="margin-left:300px !important;">
 	<div class="row">
 		<div class="mb-3" style="font-size:25px;"><b>소분류 목록</b></div>
 		<div class="mb-3" style="font-size:25px; padding-left:410px;">

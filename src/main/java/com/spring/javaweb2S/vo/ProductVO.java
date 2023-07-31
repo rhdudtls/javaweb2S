@@ -12,7 +12,7 @@ public class ProductVO {
 	private int productPrice;
 	private String fSName;
 	private String content;
-	
+	private String rgDate;
 	
 	private String categoryMainName;
 	private String categorySubName;

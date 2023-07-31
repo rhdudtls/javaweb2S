@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.spring.javaweb2S.dao.AdminDAO;
 import com.spring.javaweb2S.vo.CategoryMainVO;
 import com.spring.javaweb2S.vo.CategorySubVO;
+import com.spring.javaweb2S.vo.CouponVO;
 import com.spring.javaweb2S.vo.MemberVO;
 import com.spring.javaweb2S.vo.OptionVO;
 import com.spring.javaweb2S.vo.ProductVO;
@@ -441,4 +442,33 @@ public class AdminServiceImpl implements AdminService {
 		adminDAO.setProductCategoryUpdate(mName, originSCode, pCode);
 	}
 
+	@Override
+	public ArrayList<CouponVO> getCouponList(int startIndexNo, int pageSize) {
+		return adminDAO.getCouponList(startIndexNo, pageSize);
+	}
+
+	@Override
+	public int setCouponInput(CouponVO couponVO) {
+		return adminDAO.setCouponInput(couponVO);
+	}
+
+	@Override
+	public ArrayList<CouponVO> getCouponDupli(String number, String name) {
+		return adminDAO.getCouponDupli(number, name);
+	}
+
+	@Override
+	public int setCouponDelete(String number) {
+		return adminDAO.setCouponDelete(number);
+	}
+
+	@Override
+	public ArrayList<CouponVO> getCouponListAll() {
+		return adminDAO.getCouponListAll();
+	}
+
+	@Override
+	public int setMemberCouponGive(String[] midArr, int coupon, int date) {
+		return adminDAO.setMemberCouponGive(midArr, coupon, date);
+	}
 }

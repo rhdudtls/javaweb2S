@@ -37,6 +37,17 @@
 		    border-radius: 0px !important;
 		    width:170px !important;
 		    height:60px !important;
+		    font-size: 22px !important;
+		    
+		}
+		.btn-red-border-like {
+			border-color: #fc2020 !important;
+		    color: #fc2020 !important;
+		    font-weight: bold !important;
+		    border-radius: 0px !important;
+		    width:100px !important;
+		    height:60px !important;
+		    font-size: 22px !important;
 		    
 		}
 		.btn-gray-border {
@@ -46,7 +57,7 @@
 		    border-radius: 0px !important;
 		    width:100px !important;
 		    height:60px !important;
-		    
+		    font-size: 22px !important;
 		}
 		.btn-red {
 			border-color: #fc2020 !important;
@@ -56,6 +67,7 @@
 		    border-radius: 0px !important;
 		    width:270px !important;
 		    height:60px !important;
+		    font-size: 22px !important;
 		}
 		.slideon {
 			width:273px;
@@ -133,6 +145,15 @@
 		'use strict';
 		$(function(){
 			$("select option[value*='no']").prop('disabled',true);
+		});
+		
+		$(function(){
+			let like = '${like}';
+			
+			if(like == 'yes') {
+				$("#myLikeBtn").removeClass('btn-gray-border');
+				$("#myLikeBtn").addClass('btn-red-border-like');
+			}
 		});
 		
 		let cnt = 0;
@@ -289,6 +310,29 @@
 			myform.submit();
 		}
 		
+		function myLike() {
+			let idx = ${productVO.idx};
+			
+			$.ajax({
+				type : "post",
+				url : "${ctp}/member/memberLike",
+				data : {idx : idx},
+				success : function(res) {
+					if(res == "1"){
+						alert("관심상품으로 등록되었습니다.");
+						location.reload();
+					}
+					else if(res == "2") {
+						alert("관심상품에서 삭제되었습니다.");
+						location.reload();
+					}
+					else alert("관심상품 등록 실패");
+				},
+				error : function() {
+					alert("전송오류~");
+				}
+			});
+		}
 	</script>
 </head>
 <body>
@@ -341,7 +385,7 @@
 		  	<span><b>총 상품금액</b>(수량) : &nbsp;<span id="totPrice">0원</span>(<span id="totCount">0개</span>)</span>
 		  </div>
 		  <div class="mt-4">
-		    <input type="button" value="♡찜" class="btn btn-gray-border mr-1"/>
+		    <input type="button" id="myLikeBtn" <c:if test="${like == 'no'}">value="♡찜"</c:if> <c:if test="${like != 'no'}">value="♥찜"</c:if> onclick="myLike()" class="btn btn-gray-border mr-1"/>
 		    <input type="button" value="장바구니" onclick="fCheckBasket()" class="btn btn-red-border mr-1"/>
 		    <input type="button" value="바로구매" class="btn btn-red"/>
 		  </div>

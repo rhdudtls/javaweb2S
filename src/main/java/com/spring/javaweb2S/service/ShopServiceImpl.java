@@ -7,9 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.spring.javaweb2S.dao.ShopDAO;
+import com.spring.javaweb2S.vo.BaesongVO;
 import com.spring.javaweb2S.vo.CartVO;
 import com.spring.javaweb2S.vo.CategoryMainVO;
 import com.spring.javaweb2S.vo.OptionVO;
+import com.spring.javaweb2S.vo.OrderVO;
 import com.spring.javaweb2S.vo.ProductVO;
 
 @Service
@@ -57,6 +59,41 @@ public class ShopServiceImpl implements ShopService {
 	@Override
 	public void setCartProductOptionNumChange(int idx, int flag) {
 		shopDAO.setCartProductOptionNumChange(idx, flag);
+	}
+
+	@Override
+	public OrderVO getOrderMaxIdx() {
+		return shopDAO.getOrderMaxIdx();
+	}
+
+	@Override
+	public CartVO getCartProductInfoIdx(int cartIdx) {
+		return shopDAO.getCartProductInfoIdx(cartIdx);
+	}
+
+	@Override
+	public void setOrderInput(OrderVO vo) {
+		shopDAO.setOrderInput(vo);
+	}
+
+	@Override
+	public void setCartDeleteAfterPay(int cartIdx) {
+		shopDAO.setCartDeleteAfterPay(cartIdx);
+	}
+
+	@Override
+	public void setBaesongInput(BaesongVO baesongVO) {
+		shopDAO.setBaesongInput(baesongVO);
+	}
+
+	@Override
+	public ArrayList<ProductVO> getProductSearch(String keyword, String searchCategory) {
+		return shopDAO.getProductSearch(keyword, searchCategory);
+	}
+
+	@Override
+	public ArrayList<ProductVO> getNewProductList() {
+		return shopDAO.getNewProductList();
 	}
 
 

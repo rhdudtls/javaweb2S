@@ -77,6 +77,10 @@ public class MessageController {
 			model.addAttribute("msg", "상품 정보가 수정되었습니다.");
 			model.addAttribute("url", "/admin/productContent?idx="+idx);
 		}
+		else if(msgFlag.equals("paymentResultOk")) {
+			model.addAttribute("msg", "결제가 정상적으로 완료되었습니다.");
+			model.addAttribute("url", "/shop/paymentResultOk");
+		}
 		
 		
 		return "include/message";

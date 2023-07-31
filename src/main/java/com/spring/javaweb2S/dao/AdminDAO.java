@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.spring.javaweb2S.vo.CategoryMainVO;
 import com.spring.javaweb2S.vo.CategorySubVO;
+import com.spring.javaweb2S.vo.CouponVO;
 import com.spring.javaweb2S.vo.MemberVO;
 import com.spring.javaweb2S.vo.OptionVO;
 import com.spring.javaweb2S.vo.ProductVO;
@@ -79,5 +80,19 @@ public interface AdminDAO {
 	public void setProductDelete(@Param("idx")int idx);
 
 	public void setProductCategoryUpdate(@Param("mName")String mName, @Param("originSCode")String originSCode, @Param("pCode")String pCode);
+
+	public ArrayList<CouponVO> getCouponList(@Param("startIndexNo")int startIndexNo, @Param("pageSize")int pageSize);
+
+	public int setCouponInput(@Param("couponVO")CouponVO couponVO);
+
+	public ArrayList<CouponVO> getCouponDupli(@Param("number")String number, @Param("name")String name);
+
+	public int setCouponDelete(@Param("number")String number);
+
+	public int totRecCnt();
+
+	public ArrayList<CouponVO> getCouponListAll();
+
+	public int setMemberCouponGive(@Param("midArr")String[] midArr, @Param("coupon")int coupon, @Param("date")int date);
 
 }

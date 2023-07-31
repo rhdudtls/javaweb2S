@@ -47,7 +47,7 @@
 		    height:45px !important;
 		}
 		th {
-			background-color: #ECECEC;
+			background-color: #eee;
 		}
 		
 		.bottomInfo {
@@ -216,6 +216,35 @@
 			});
 			
 		}
+		
+		function onOrder(idx) {
+			myform.buyIdx.value = idx;
+			myform.submit();
+		}
+		
+		function onOrderAll(cnt) {
+			let idxArr = [];
+			for(let i = 1; i < cnt; i++) {
+				let valArr = $("#p"+i).val().split("/");
+				idxArr.push(parseInt(valArr[0]));
+			}
+			
+			myform.buyIdx.value = idxArr;
+			myform.submit();
+		}
+		
+		function onOrderChoice() {
+			let idxArr = [];
+			$('input:checkbox[name=product]').each(function (index) {
+				if($(this).is(":checked")==true){
+					let valArr = $(this).val().split("/");
+					idxArr.push(parseInt(valArr[0]));
+			    }
+			});
+			
+			myform.buyIdx.value = idxArr;
+			myform.submit();
+		}
 	</script>
 </head>
 <body>
@@ -238,10 +267,11 @@
 				<th style="width:130px;">합계</th>
 				<th>비고</th>
 			</tr>
+			<c:set var="cnt" value="1"/>
 			<c:forEach var="vo" items="${vosCart}" varStatus="st">
 				<c:set var="price" value="${vo.productPrice + vo.optionPrice}"/>
 				<tr class="text-center" style="line-height: 80px;">
-					<td><input type="checkbox" name="product" value="${vo.idx}/${vo.totalPrice}" onchange="onTotal()" checked/></td>
+					<td><input type="checkbox" name="product" id="p${cnt}" value="${vo.idx}/${vo.totalPrice}" onchange="onTotal()" checked/></td>
 					<td class="text-left" style="width:420px;">
 						<img src="${ctp}/data/shop/product/${vo.thumbImg}" width="100px;" style="float:left"/>
 						<div class="mt-4" style="line-height: 25px;">
@@ -261,10 +291,11 @@
 					<td>3,000원 조건</td>
 					<td><b><fmt:formatNumber value="${vo.totalPrice}"/>원</b></td>
 					<td class="pt-4" style="line-height: 0px;">
-						<div><input type="button" value="주문하기" onclick="location.href='${ctp}/shop/shopOrder';" class="btn btn-red-border mb-1"/></div>
+						<div><input type="button" value="주문하기" onclick="onOrder(${vo.idx})" class="btn btn-red-border mb-1"/></div>
 						<div><input type="button" value="삭제" onclick="cartDeleteOne(${vo.idx})" class="btn btn-gray-border"/></div>
 					</td>
 				</tr>
+				<c:set var="cnt" value="${cnt + 1}"/>
 			</c:forEach>
 			<tr class="bottomInfo" style="border-bottom:1px solid #9DB2BF;">
 				<td colspan="5">[기본배송]</td>
@@ -291,16 +322,16 @@
 			</tr>
 		</table>
 		<div class="text-center">
-			<input type="button" value="선택상품 주문하기" class="btn btn-red-border-2"/>
-			<input type="button" value="전체상품 주문하기" class="btn btn-red"/>
+			<input type="button" value="선택상품 주문하기" onclick="onOrderChoice()" class="btn btn-red-border-2"/>
+			<input type="button" value="전체상품 주문하기" onclick="onOrderAll(${cnt})" class="btn btn-red"/>
 		</div>
 	</c:if>
 	<c:if test="${fn:length(vosCart) == 0 }">
 		<div class="text-center mt-5 mb-5"><font size="4" color="gray">장바구니가 비어 있습니다.</font></div>
 		<div class="text-center mb-5"><input type="button" value="쇼핑하러가기" onclick="location.href='${ctp}/shop/shopList?category=A&part=all';" class="btn btn-red-border-2"/></div>
 	</c:if>
-	<form name="mform" method="post">
-		<input type="hidden" name="buy"/>
+	<form name="myform" method="post">
+		<input type="hidden" name="buyIdx"/>
 	</form>
 </div>
 <p><br/></p>

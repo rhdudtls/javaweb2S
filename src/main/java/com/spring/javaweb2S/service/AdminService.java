@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.javaweb2S.vo.CategoryMainVO;
 import com.spring.javaweb2S.vo.CategorySubVO;
+import com.spring.javaweb2S.vo.CouponVO;
 import com.spring.javaweb2S.vo.MemberVO;
 import com.spring.javaweb2S.vo.OptionVO;
 import com.spring.javaweb2S.vo.ProductVO;
@@ -76,5 +77,17 @@ public interface AdminService {
 	public void imgCheckProductDelete(int idx);
 
 	public void setProductCategoryUpdate(String mName, String originSCode, String sCode);
+
+	public ArrayList<CouponVO> getCouponList(int startIndexNo, int pageSize);
+
+	public int setCouponInput(CouponVO couponVO);
+
+	public ArrayList<CouponVO> getCouponDupli(String number, String name);
+
+	public int setCouponDelete(String number);
+
+	public ArrayList<CouponVO> getCouponListAll();
+
+	public int setMemberCouponGive(String[] midArr, int coupon, int date);
 
 }

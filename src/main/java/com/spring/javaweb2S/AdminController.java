@@ -21,9 +21,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.spring.javaweb2S.pagination.PageProcess;
+import com.spring.javaweb2S.pagination.PageVO;
 import com.spring.javaweb2S.service.AdminService;
+import com.spring.javaweb2S.service.MemberService;
 import com.spring.javaweb2S.vo.CategoryMainVO;
 import com.spring.javaweb2S.vo.CategorySubVO;
+import com.spring.javaweb2S.vo.CouponVO;
 import com.spring.javaweb2S.vo.MemberVO;
 import com.spring.javaweb2S.vo.OptionVO;
 import com.spring.javaweb2S.vo.ProductVO;
@@ -34,6 +38,9 @@ public class AdminController {
 	
 	@Autowired
 	AdminService adminService;
+	
+	@Autowired
+	PageProcess pageProcess;
 	
 	@RequestMapping(value = "/adminMain", method = RequestMethod.GET)
 	public String adminMainGet() {
@@ -436,6 +443,63 @@ public class AdminController {
 		}
 		
 		return "1";
+	}
+	
+	@RequestMapping(value="/couponList", method = RequestMethod.GET)
+	public String couponListGet(Model model,
+			@RequestParam(name="pag", defaultValue = "1", required=false) int pag,
+			@RequestParam(name="pageSize", defaultValue = "5", required=false) int pageSize) {
+		PageVO pageVO = pageProcess.totRecCnt("", pag, pageSize, "coupon", "", "");
+		ArrayList<CouponVO> vos = adminService.getCouponList(pageVO.getStartIndexNo(), pageSize);
+		
+		model.addAttribute("vos", vos);
+		model.addAttribute("pageVO", pageVO);
+		return "admin/couponList";
+	}
+	
+	@RequestMapping(value="/couponGive", method = RequestMethod.GET)
+	public String couponGiveGet(Model model) {
+		ArrayList<MemberVO> vos = adminService.getMemberList();
+		ArrayList<CouponVO> couponVOS = adminService.getCouponListAll();
+		
+		model.addAttribute("vos", vos);
+		model.addAttribute("couponVOS", couponVOS);
+		return "admin/couponGive";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/couponInput", method = RequestMethod.POST)
+	public String couponInputPost(CouponVO couponVO) {
+		
+		ArrayList<CouponVO> vos = adminService.getCouponDupli(couponVO.getNumber(), couponVO.getName());
+		
+		if(vos.size() != 0) return "2";
+		
+		
+		int res = adminService.setCouponInput(couponVO);
+		
+		if(res == 1) return "1";
+		else return "0";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/couponDelete", method = RequestMethod.POST)
+	public String couponDeletePost(String number) {
+		
+		int res = adminService.setCouponDelete(number);
+		
+		if(res == 1) return "1";
+		else return "0";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/couponGive", method = RequestMethod.POST)
+	public String couponGivePost(String[] midArr, int coupon, int date) {
+		
+		int res = adminService.setMemberCouponGive(midArr, coupon, date);
+		
+		if(res == 1) return "1";
+		else return "0";
 	}
 
 }

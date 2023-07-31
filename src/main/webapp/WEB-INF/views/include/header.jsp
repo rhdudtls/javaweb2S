@@ -19,7 +19,7 @@
 			padding-right:12px;
 			color:black;
 		}
-		#search_input {
+		.keyword {
 			width: 100%;
 			height:50px;
 			border: 0px #fff;
@@ -93,6 +93,19 @@
 			margin-top:7.5px;
 		}
 	</style>
+	<script>
+		'use strict';
+		
+		function searchCheck() {
+			let keyword = searchForm.keyword.value;
+			
+			if(keyword.trim() == "") {
+				alert("검색어를 입력하세요!");
+				return false;
+			}
+			else searchForm.submit();
+		}
+	</script>
 </head>
 <body>
 <p><br/></p>
@@ -102,27 +115,23 @@
 			<a href="${ctp}/"><img src="${ctp}/images/top_logo.png"/></a>
 		</div>
 		<div class="col-6 search">
-			<input type="text" id="search_input" placeholder="닭가슴살은 역시 마이닭!">
-			<img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
+			<form name="searchForm" action="${ctp}/shop/shopSearch" onsubmit="return searchCheck()">
+				<input type="hidden" name="flag" value="header"/>
+				<input type="text" name="keyword" id="keyword" class="keyword" placeholder="닭가슴살은 역시 마이닭!">
+				<a href="javascript:searchCheck()"><img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"></a>
+			</form>
 		</div>
 		<div class="col-3 mt-2" style="font-size:2.5em;">
 			<div class="row">
-				<c:if test="${1 <= level && level <= 3}">
-					<div class="col-3 mt-3 pl-3 pr-0">
-						<span style="font-size:16px;">
-							${sNickName}님
-						</span>
-					</div>
-				</c:if>
 				<c:if test="${level == 0}">
-					<div class="col-3 pl-5">
+					<div class="col-3 gear pl-5">
 						<a href="${ctp}/admin/adminMain"><i class="fa-solid fa-gear top_icon text-center" id="admin"><font size="1">관리자</font></i></a>
 					</div>
 				</c:if>
 				<div class="col-9 text-right">
-					<i class="fa-regular fa-user top_icon"></i>
+					<a href="${ctp}/member/memberMyOrder"><i class="fa-regular fa-user top_icon"></i></a>
 					<a href="${ctp}/shop/shopCart"><i class="fa-solid fa-cart-shopping top_icon" style="padding-right:15px;"></i></a>
-					<i class="fa-regular fa-calendar-check top_icon"></i>
+					<a href="${ctp}/member/memberAttend"><i class="fa-regular fa-calendar-check top_icon"></i></a>
 				</div>
 			</div>
 		</div>

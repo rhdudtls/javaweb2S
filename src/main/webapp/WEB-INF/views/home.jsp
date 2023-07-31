@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <c:set var="ctp" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
@@ -85,15 +87,15 @@
 	</div>
 	<hr/>
 	<div class="row">
-		<c:forEach var="i" begin="1" end="4">
+		<c:forEach var="vo" items="${vosProduct}">
 			<div class="card col" style="width:265px; border:none;">
-			    <img class="card-img-top" src="${ctp}/images/product1.jpg" style="width:100%">
+			    <img class="card-img-top" src="${ctp}/data/shop/product/${vo.FSName}" style="width:100%">
 			    <div class="card-body p-0 mt-2">
-			    	<div class="card-title" style="font-size:17px;"><b>미트리 파워에너지 프로틴바 2종 골라담기</b></div>
+			    	<div class="card-title" style="font-size:17px;"><b>${vo.productName}</b></div>
 					<p class="card-text">
 						<span style="color:red;font-size:22px;"><b>37%</b></span>&nbsp;&nbsp;
 						<span style="font-size:19px;"><b>2,200원</b></span>&nbsp;
-						<span style="color:gray;font-size:14px;"><b><s>3,500원</s></b></span>
+						<span style="color:gray;font-size:14px;"><b><s><fmt:formatNumber value="${vo.productPrice}"/>원</s></b></span>
 					</p>
 		    	</div>
 		    </div>

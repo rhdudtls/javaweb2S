@@ -35,11 +35,11 @@
 <body>
 <hr style="margin:0; background:gray;height:1px;border:0;"/>
 	<h3 class="text-light text-center mt-4 mb-4 ml-0">MY DAK🍗</h3>
-	<button type="button" class="collapsible" onclick="collapse(this);">회원 관리</button>
+	<button type="button" class="collapsible" onclick="collapse(this);">회원</button>
     <div class="content">
-       <p style="padding-left:5px;"><a href="${ctp}/admin/adMemberList">회원 목록</a><p>
+       <p style="padding-left:8px;"><a href="${ctp}/admin/adMemberList">회원 관리</a><p>
     </div>
-    <button type="button" class="collapsible" onclick="collapse(this);">상품 관리</button>
+    <button type="button" class="collapsible" onclick="collapse(this);">상품</button>
     <div class="content">
          <p><a href="${ctp}/admin/d1Management">대분류 관리</a><p>
          <p><a href="${ctp}/admin/d2Management">소분류 관리</a><p>
@@ -47,9 +47,14 @@
          <p style="padding-left:5px;"><a href="${ctp}/admin/productList">상품 목록</a><p>
          <p style="margin-left:-7px;"><a href="${ctp}/admin/productOption">상품 옵션 관리</a><p>
     </div>
-    <button type="button" class="collapsible" onclick="collapse(this);">뭐할까</button>
+    <button type="button" class="collapsible" onclick="collapse(this);">주문</button>
     <div class="content">
-        <p>내용 3 입니다.</p>
+        <p style="padding-left:8px;">주문내역</p>
+    </div>
+    <button type="button" class="collapsible" onclick="collapse(this);">쿠폰</button>
+    <div class="content">
+        <p style="padding-left:8px;"><a href="${ctp}/admin/couponList">쿠폰 관리</a></p>
+        <p style="padding-left:8px;"><a href="${ctp}/admin/couponGive">쿠폰 지급</a></p>
     </div>
     <div class="mt-5 text-center">
     	<a href="${ctp}/" class="btn btn-green"><b>홈으로 돌아가기</b></a>

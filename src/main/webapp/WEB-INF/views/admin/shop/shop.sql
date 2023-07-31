@@ -52,5 +52,5 @@ select product.*, (select categoryMainName from md_categoryMain where product.ca
 select product.*, (select categoryMainName from md_categoryMain where product.categoryMainCode = categoryMainCode) as categoryMainName, (select categorySubName from md_categorySub where product.categorySubCode = categorySubCode) as categorySubName from md_product product, md_categoryMain main, md_categorySub sub where productName = '간식' limit 1;
   		
 update md_product set productCode = replace(productCode, SUBSTR(productCode,1,4), 'C203') where categorySubCode = '404';
-  		
+alter table md_product add rgDate datetime default now();		
 drop table categoryMain;

@@ -8,15 +8,68 @@
 	<select id="getMemberInfo" resultType="com.spring.javaweb2S.vo.MemberVO">
 		select * from md_member where mid = #{mid};
 	</select>
+	
+	<select id="getCouPonListMine" resultType="com.spring.javaweb2S.vo.CouponVO">
+		select * from md_coupons c, md_memberCoupon m where m.mid=#{mid} and c.idx = m.couponIdx;
+	</select>
+	
+	<select id="getCouponInfo" resultType="com.spring.javaweb2S.vo.CouponVO">
+		select * from md_coupons where number = #{number};
+	</select>
+	
+	<select id="getCouponDupli" resultType="com.spring.javaweb2S.vo.CouponVO">
+		select * from md_membercoupon where mid = #{mid} and couponIdx = (select idx from md_coupons where number = #{number});
+	</select>
+	
+	<select id="getMyOrderList" resultType="com.spring.javaweb2S.vo.OrderVO">
+		<if test='startDate == "" and lastDate == "" and part == "all"'>
+			select o.*, b.orderStatus, (select count(*) from md_order where orderIdx = b.orderIdx group by orderIdx)as cnt from md_order o, md_baesong b where o.mid = #{mid} and o.orderIdx = b.orderIdx and orderDate between date_sub(DATE(now()), interval 90 DAY) and DATE(now()) order by idx desc;
+		</if>
+		<if test='startDate != "" and lastDate != "" and part == "all"'>
+			select o.*, b.orderStatus, (select count(*) from md_order where orderIdx = b.orderIdx group by orderIdx)as cnt from md_order o, md_baesong b where o.mid = #{mid} and o.orderIdx = b.orderIdx and orderDate between #{startDate} and #{lastDate} order by idx desc;
+		</if>
+		<if test='startDate != "" and lastDate != "" and part != "all"'>
+			select o.*, b.orderStatus, (select count(*) from md_order where orderIdx = b.orderIdx group by orderIdx)as cnt from md_order o, md_baesong b where o.mid = #{mid} and o.orderIdx = b.orderIdx and orderDate between #{startDate} and #{lastDate} and orderStatus = #{part} order by idx desc;
+		</if>
+	</select>
+	
+	<select id="getMyLike" resultType="com.spring.javaweb2S.vo.LikeVO">
+		select * from md_like where mid = #{mid} and productIdx = #{idx};
+	</select>
+	
+	<select id="getMyLikeList" resultType="com.spring.javaweb2S.vo.ProductVO">
+		select p.* from md_product p, md_like l where l.mid = #{mid} and l.productIdx = p.idx order by idx desc limit #{startIndexNo}, #{pageSize}; 
+	</select>
+	
+	<select id="totRecCntLike" resultType="int">
+		select count(*) from md_like where mid = #{mid};
+	</select>
+	
 	<insert id="setMemberJoin">
 		insert into md_member values(default, #{vo.mid}, #{vo.pwd}, #{vo.name}, #{vo.nickName}, #{vo.tel}, #{vo.email}, #{vo.gender}, #{vo.birthday}, #{vo.address}, default, default, default, default, #{vo.snsCheck});
+	</insert>
+	
+	<insert id="setCouponGet">
+		insert into md_membercoupon values(default, #{mid}, (select idx from md_coupons where number = #{number}), default, date_add(now(), interval 30 DAY));
+	</insert>
+	
+	<insert id="setMemberLikeInput">
+		insert into md_like values(default, #{mid}, #{idx});
 	</insert>
 	
 	<update id="setMemberLastVisitDate">
 		update md_member set lastVisitDate = now() where mid = #{vo.mid};
 	</update>
 	
+	<update id="setMemberPointUpdate">
+		update md_member set point = point - #{point} where mid = #{mid};
+	</update>
+	
 	<delete id="setMemberAutoDelete">
 		delete from md_member where memberDel = 'YES' and datediff(now(), lastVisitDate) > 30;
+	</delete>
+	
+	<delete id="setMemberLikeDelete">
+		delete from md_like where mid = #{mid} and  productIdx = #{idx};
 	</delete>
 </mapper>
